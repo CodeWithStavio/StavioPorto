@@ -7,15 +7,31 @@
    ============================================= */
 
 :root {
-  /* Light Theme (Default) */
-  --background: #e8e9e8;
-  --text-primary: #141414;
-  --text-secondary: rgba(20, 20, 20, 0.6);
-  --text-tertiary: rgba(20, 20, 20, 0.4);
-  --accent: #a0c000;
-  --accent-hover: #8fb000;
-  --divider: rgba(20, 20, 20, 0.08);
-  --hover-bg: rgba(20, 20, 20, 0.03);
+  /* Shadcn Neutral Light Theme */
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #0a0a0a;
+
+  /* Legacy mappings */
+  --text-primary: #0a0a0a;
+  --text-secondary: #525252;
+  --text-tertiary: #a3a3a3;
+  --divider: #e5e5e5;
+  --hover-bg: #f5f5f5;
 
   /* Typography */
   --title-xxl: 8rem;
@@ -38,12 +54,31 @@
 }
 
 .dark {
-  --background: #141414;
-  --text-primary: #e8e9e8;
-  --text-secondary: rgba(232, 233, 232, 0.6);
-  --text-tertiary: rgba(232, 233, 232, 0.4);
-  --divider: rgba(232, 233, 232, 0.08);
-  --hover-bg: rgba(232, 233, 232, 0.03);
+  /* Shadcn Neutral Dark Theme */
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #0a0a0a;
+  --card-foreground: #fafafa;
+  --popover: #0a0a0a;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #171717;
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #262626;
+  --accent-foreground: #fafafa;
+  --border: #262626;
+  --input: #262626;
+  --ring: #d4d4d4;
+
+  /* Legacy mappings */
+  --text-primary: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #525252;
+  --divider: #262626;
+  --hover-bg: #171717;
 }
 
 /* =============================================
@@ -113,7 +148,7 @@ button {
 /* Focus visible for accessibility */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ring);
   outline-offset: 4px;
 }
 
@@ -276,7 +311,7 @@ button:focus-visible {
   right: 0;
   width: 0.625rem;
   height: 0.625rem;
-  background-color: var(--accent);
+  background-color: var(--text-primary);
   border-radius: 50%;
   border: 2px solid var(--background);
   z-index: 1;
@@ -386,8 +421,8 @@ button:focus-visible {
   align-items: center;
   gap: 0.625rem;
   padding: 0.625rem 1rem;
-  background-color: var(--accent);
-  color: #141414;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
   font-size: var(--small);
   font-weight: 500;
   border: none;
@@ -398,7 +433,7 @@ button:focus-visible {
 
 .navbar__menu-btn:hover {
   transform: scale(1.02);
-  background-color: var(--accent-hover);
+  background-color: var(--text-secondary);
 }
 
 .navbar__menu-btn:active {
@@ -542,7 +577,8 @@ button:focus-visible {
   height: 1.05em;
   display: flex;
   align-items: center;
-  color: var(--accent);
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 @keyframes wordSlide {
@@ -567,8 +603,10 @@ button:focus-visible {
 }
 
 .hero__accent {
-  color: var(--accent);
-  font-weight: 500;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* Hero title line for letter animation */
@@ -580,27 +618,27 @@ button:focus-visible {
 /* Hero scroll indicator */
 .hero__scroll {
   position: absolute;
-  bottom: 4rem;
+  bottom: 7rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .hero__scroll-line {
   width: 1px;
-  height: 4rem;
-  background: linear-gradient(to bottom, var(--text-primary), transparent);
+  height: 2.5rem;
+  background: linear-gradient(to bottom, var(--text-tertiary), transparent);
   transform-origin: top;
 }
 
 .hero__scroll-text {
   font-size: 0.625rem;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
 }
 
 /* Hero marquee */
@@ -623,7 +661,7 @@ button:focus-visible {
 }
 
 .hero__marquee-divider {
-  color: var(--accent);
+  color: var(--text-tertiary);
   font-size: var(--small);
 }
 
@@ -803,7 +841,7 @@ button:focus-visible {
 
 .expertise__item:hover .expertise__arrow {
   transform: translateX(0.5rem);
-  color: var(--accent);
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
@@ -847,7 +885,7 @@ button:focus-visible {
 .work-card:hover {
   transform: translateY(-0.5rem);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border-color: var(--accent);
+  border-color: var(--text-primary);
 }
 
 .work-card__image {
@@ -906,7 +944,7 @@ button:focus-visible {
 }
 
 .work-card:hover .work-card__title {
-  color: var(--accent);
+  color: var(--text-primary);
 }
 
 .work-card__description {
@@ -933,8 +971,8 @@ button:focus-visible {
 }
 
 .work-card:hover .work-card__tag {
-  background-color: var(--accent);
-  color: #141414;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* =============================================
@@ -955,7 +993,7 @@ button:focus-visible {
 
 .cta__link {
   font-size: var(--title-m);
-  color: var(--accent);
+  color: var(--text-primary);
   position: relative;
   display: inline-block;
   font-weight: 500;
@@ -969,14 +1007,14 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--accent);
+  background-color: var(--text-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--duration-slow) var(--easing);
 }
 
 .cta__link:hover {
-  color: var(--accent-hover);
+  color: var(--text-secondary);
 }
 
 .cta__link:hover::after {
@@ -1031,19 +1069,19 @@ button:focus-visible {
 }
 
 .link-animated--accent {
-  color: var(--accent);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .link-animated--accent::after {
   height: 2px;
-  background-color: var(--accent);
+  background-color: var(--text-primary);
   transform: scaleX(1);
   transform-origin: left;
 }
 
 .link-animated--accent:hover {
-  color: var(--accent-hover);
+  color: var(--text-secondary);
 }
 
 .link-animated--accent:hover::after {
@@ -1090,7 +1128,7 @@ button:focus-visible {
 
 .contact__email {
   font-size: var(--title-m);
-  color: var(--accent);
+  color: var(--text-primary);
   position: relative;
   display: inline-block;
   font-weight: 500;
@@ -1104,14 +1142,14 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--accent);
+  background-color: var(--text-primary);
   transform: scaleX(1);
   transform-origin: left;
   transition: transform var(--duration-slow) var(--easing);
 }
 
 .contact__email:hover {
-  color: var(--accent-hover);
+  color: var(--text-secondary);
 }
 
 .contact__email:hover::after {
@@ -1259,17 +1297,17 @@ button:focus-visible {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
+  background: var(--text-tertiary);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-hover);
+  background: var(--text-secondary);
 }
 
 ::selection {
-  background-color: var(--accent);
-  color: #141414;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* =============================================
@@ -1304,11 +1342,11 @@ button:focus-visible {
 .gradient-text {
   background: linear-gradient(
     135deg,
-    var(--accent) 0%,
-    #00d4ff 25%,
-    var(--accent) 50%,
-    #ff6b6b 75%,
-    var(--accent) 100%
+    var(--text-primary) 0%,
+    var(--text-secondary) 25%,
+    var(--text-primary) 50%,
+    var(--text-tertiary) 75%,
+    var(--text-primary) 100%
   );
   background-size: 400% 400%;
   -webkit-background-clip: text;
@@ -1324,12 +1362,12 @@ button:focus-visible {
 
 /* Glow effect on accent elements */
 .glow {
-  box-shadow: 0 0 20px rgba(160, 192, 0, 0.3),
-              0 0 40px rgba(160, 192, 0, 0.1);
+  box-shadow: 0 0 20px rgba(10, 10, 10, 0.1),
+              0 0 40px rgba(10, 10, 10, 0.05);
 }
 
 .glow-text {
-  text-shadow: 0 0 30px rgba(160, 192, 0, 0.5);
+  text-shadow: none;
 }
 
 /* Glassmorphism */
@@ -1353,8 +1391,7 @@ button:focus-visible {
 
 .hover-lift:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
-              0 0 30px rgba(160, 192, 0, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
 /* Shimmer effect for loading/reveal */
@@ -1395,18 +1432,7 @@ button:focus-visible {
 
 /* Pulse glow effect */
 .pulse-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(160, 192, 0, 0.3),
-                0 0 10px rgba(160, 192, 0, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(160, 192, 0, 0.5),
-                0 0 40px rgba(160, 192, 0, 0.3);
-  }
+  animation: none;
 }
 
 /* Magnetic button base styles */
@@ -1418,29 +1444,18 @@ button:focus-visible {
   padding: 1rem 2.5rem;
   font-size: var(--body);
   font-weight: 500;
-  color: #141414;
-  background: var(--accent);
+  color: var(--primary-foreground);
+  background: var(--primary);
   border: none;
   border-radius: 0;
   cursor: pointer;
   overflow: hidden;
-  transition: transform var(--duration-fast) var(--easing);
+  transition: transform var(--duration-fast) var(--easing),
+              background-color var(--duration-normal) var(--easing);
 }
 
-.magnetic-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--accent) 0%, #c8f000 100%);
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--easing);
-}
-
-.magnetic-btn:hover::before {
-  opacity: 1;
+.magnetic-btn:hover {
+  background: var(--text-secondary);
 }
 
 .magnetic-btn span {
@@ -1513,8 +1528,8 @@ button:focus-visible {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: var(--accent);
+  height: 2px;
+  background: var(--text-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.6s var(--easing);
@@ -1535,9 +1550,9 @@ button:focus-visible {
   position: absolute;
   left: 0;
   top: 0;
-  width: 2px;
+  width: 1px;
   height: 0;
-  background: linear-gradient(to bottom, var(--accent), transparent);
+  background: linear-gradient(to bottom, var(--text-tertiary), transparent);
   animation: bioLineReveal 1s var(--easing) 1.2s forwards;
 }
 
@@ -1560,7 +1575,7 @@ button:focus-visible {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--accent);
+  background: var(--text-primary);
   transition: width 0.8s var(--easing);
 }
 
@@ -1577,7 +1592,7 @@ button:focus-visible {
 }
 
 .expertise__item:hover .expertise__number {
-  background: linear-gradient(135deg, var(--accent), #00d4ff);
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1596,19 +1611,12 @@ button:focus-visible {
 .work-card::before {
   content: '';
   position: absolute;
-  inset: -2px;
-  background: linear-gradient(135deg, var(--accent), #00d4ff, var(--accent));
-  background-size: 200% 200%;
+  inset: -1px;
+  background: var(--text-primary);
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
   transition: opacity var(--duration-normal) var(--easing);
-  animation: borderGlow 3s linear infinite;
-}
-
-@keyframes borderGlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
 .work-card:hover::before {
@@ -1677,18 +1685,7 @@ button:focus-visible {
    ============================================= */
 
 .blob-bg {
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.15;
-  background: radial-gradient(circle at 30% 20%, rgba(160, 192, 0, 0.4) 0%, transparent 50%),
-              radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 50% 50%, rgba(255, 107, 107, 0.2) 0%, transparent 50%);
-  animation: blobMove 20s ease-in-out infinite;
+  display: none;
 }
 
 @keyframes blobMove {
@@ -1727,9 +1724,9 @@ button:focus-visible {
 
 /* Enhanced focus states */
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ring);
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(160, 192, 0, 0.2);
+  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.1);
 }
 
 /* Interactive hover for all clickable elements */
@@ -1756,7 +1753,7 @@ button:focus-visible {
   width: 40px;
   height: 40px;
   border: 2px solid var(--divider);
-  border-top-color: var(--accent);
+  border-top-color: var(--text-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -1782,15 +1779,14 @@ button:focus-visible {
 
 /* Text utilities */
 .text-gradient {
-  background: linear-gradient(135deg, var(--text-primary), var(--accent));
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-glow {
-  text-shadow: 0 0 40px rgba(160, 192, 0, 0.6),
-               0 0 80px rgba(160, 192, 0, 0.3);
+  text-shadow: none;
 }
 
 /* Smooth transition utilities */
