@@ -11,18 +11,16 @@ const config: Config = {
     extend: {
       colors: {
         background: 'var(--background)',
-        'background-secondary': 'var(--background-secondary)',
-        'primary-text': 'var(--primary-text)',
-        'secondary-text': 'var(--secondary-text)',
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
         accent: 'var(--accent)',
-        'accent-light': 'var(--accent-light)',
-        muted: 'var(--muted)',
+        divider: 'var(--divider)',
       },
       fontFamily: {
-        sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
       transitionTimingFunction: {
-        'smooth': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        smooth: 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
     },
   },

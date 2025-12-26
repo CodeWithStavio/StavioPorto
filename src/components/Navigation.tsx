@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useTheme } from './ThemeProvider'
 
 const navLinks = [
@@ -13,88 +15,101 @@ const navLinks = [
 export default function Navigation() {
   const { theme, toggleTheme, mounted } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white font-medium text-xs">
-                MA
+      <nav className="navbar">
+        <div className="container">
+          <div className="navbar__inner">
+            {/* Left - Logo */}
+            <Link href="/" className="navbar__left">
+              <div className="navbar__image">
+                <Image
+                  src="/assets/Me.jpg"
+                  alt="Mustafa Alhassny"
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <div className="navbar__status" />
               </div>
-              <div className="status-dot" />
-            </div>
-            <span className="text-sm font-medium">Mustafa Alhassny</span>
-          </Link>
+              <span className="navbar__name">Mustafa Alhassny</span>
+            </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-6">
+            {/* Right - Links + Controls */}
+            <div className="navbar__right">
+              <div className="navbar__links">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="navbar__link"
+                  >
+                    {link.text}
+                  </Link>
+                ))}
+                {mounted && (
+                  <button onClick={toggleTheme} className="navbar__theme">
+                    {theme === 'light' ? 'Dark' : 'Light'}
+                  </button>
+                )}
+              </div>
+
+              {/* Menu Button */}
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="navbar__menu-btn"
+              >
+                <span>Menu</span>
+                <span>{menuOpen ? '×' : '+'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Fullscreen Menu Overlay */}
+      <div className={`menu-overlay ${menuOpen ? 'is-open' : ''}`}>
+        <div className="container">
+          <div className="menu-overlay__links">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="nav-link text-sm text-secondary-text"
+                onClick={() => setMenuOpen(false)}
+                className="menu-overlay__link"
               >
                 {link.text}
               </Link>
             ))}
-            {mounted && (
-              <button
-                onClick={toggleTheme}
-                className="nav-link text-sm text-secondary-text flex items-center gap-1"
-              >
-                {theme === 'light' ? 'Dark' : 'Light'}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                </svg>
-              </button>
-            )}
           </div>
 
-          {/* Menu Button */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="menu-btn"
-          >
-            Menu
-            <span className="text-base">{menuOpen ? '×' : '+'}</span>
-          </button>
+          {mounted && (
+            <button
+              onClick={() => {
+                toggleTheme()
+                setMenuOpen(false)
+              }}
+              className="menu-overlay__theme"
+            >
+              Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+            </button>
+          )}
         </div>
-      </nav>
-
-      {/* Full Screen Menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-background pt-20 px-6">
-          <div className="max-w-6xl mx-auto pt-8">
-            <div className="space-y-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="block text-4xl md:text-6xl font-medium hover:text-accent transition-colors"
-                >
-                  {link.text}
-                </Link>
-              ))}
-            </div>
-
-            {mounted && (
-              <button
-                onClick={() => {
-                  toggleTheme()
-                  setMenuOpen(false)
-                }}
-                className="mt-10 text-lg text-secondary-text hover:text-accent transition-colors"
-              >
-                Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      </div>
     </>
   )
 }
