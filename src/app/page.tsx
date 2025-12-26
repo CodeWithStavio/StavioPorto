@@ -7,8 +7,11 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <div className="section-divider" />
       <Expertise />
+      <div className="section-divider" />
       <CallToAction />
+      <div className="section-divider" />
       <Contact />
     </>
   )

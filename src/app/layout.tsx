@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
+import CustomCursor from '@/components/CustomCursor'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 export const metadata: Metadata = {
@@ -15,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans">
+      <body className="font-sans antialiased">
         <ThemeProvider>
+          <CustomCursor />
           <Navigation />
-          <main>{children}</main>
+          <main className="min-h-screen">{children}</main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
