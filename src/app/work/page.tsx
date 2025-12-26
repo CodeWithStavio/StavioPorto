@@ -4,23 +4,23 @@ const projects = [
   {
     number: '01',
     title: 'Divvy',
-    thumbnail: '/assets/Divvy.avif',
+    description: 'A mobile app for splitting bills and managing shared expenses with friends and family.',
     color: '#f60',
-    stack: ['Full Stack Mobile Application', 'Front-End - Back-End'],
+    tags: ['React Native', 'Node.js', 'MongoDB'],
   },
   {
     number: '02',
     title: 'F.U.S.E',
-    thumbnail: '/assets/Fuse.avif',
+    description: 'Full-stack mobile application with comprehensive backend infrastructure and hosting.',
     color: '#574bc1',
-    stack: ['Full Stack Mobile Application', 'Front-End - Back-End - Hosting'],
+    tags: ['React Native', 'Express', 'AWS'],
   },
   {
     number: '03',
     title: 'AceLounge',
-    thumbnail: '/assets/AceLounge.avif',
+    description: 'Complete mobile solution with DevOps pipeline and cloud hosting infrastructure.',
     color: '#000f14',
-    stack: ['Full Stack Mobile Application', 'Front-End - Back-End - DevOps & Hosting'],
+    tags: ['React Native', 'Docker', 'Kubernetes'],
   },
 ]
 
@@ -37,32 +37,35 @@ export default function Work() {
         </div>
       </section>
 
-      {/* Work List */}
-      <section className="work-list">
+      {/* Work Cards */}
+      <section className="work-section">
         <div className="container">
           <div className="section-header">
             <span>[A]</span>
             <span>Work</span>
           </div>
 
-          {projects.map((project) => (
-            <div key={project.number} className="work-item">
-              <span className="work-item__number">{project.number}</span>
-              <div className="work-item__thumbnail">
-                <img
-                  src={project.thumbnail}
-                  alt={project.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.5rem' }}
-                />
+          <div className="work-grid">
+            {projects.map((project) => (
+              <div key={project.number} className="work-card">
+                <div
+                  className="work-card__image"
+                  style={{ backgroundColor: project.color }}
+                >
+                  <span className="work-card__number">{project.number}</span>
+                </div>
+                <div className="work-card__content">
+                  <h3 className="work-card__title">{project.title}</h3>
+                  <p className="work-card__description">{project.description}</p>
+                  <div className="work-card__tags">
+                    {project.tags.map((tag, i) => (
+                      <span key={i} className="work-card__tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <h3 className="work-item__title">{project.title}</h3>
-              <div className="work-item__stack">
-                {project.stack.map((line, i) => (
-                  <span key={i}>{line}</span>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
