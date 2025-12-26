@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 const projects = [
@@ -50,12 +49,10 @@ export default function Work() {
             <div key={project.number} className="work-item">
               <span className="work-item__number">{project.number}</span>
               <div className="work-item__thumbnail">
-                <Image
+                <img
                   src={project.thumbnail}
                   alt={project.title}
-                  width={96}
-                  height={64}
-                  style={{ objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.5rem' }}
                 />
               </div>
               <h3 className="work-item__title">{project.title}</h3>
