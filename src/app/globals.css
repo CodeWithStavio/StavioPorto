@@ -565,7 +565,63 @@ button:focus-visible {
   font-weight: 500;
 }
 
-/* Scroll indicator */
+/* Hero title line for letter animation */
+.hero__title-line {
+  display: block;
+  perspective: 1000px;
+}
+
+/* Hero scroll indicator */
+.hero__scroll {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 4rem;
+  background: linear-gradient(to bottom, var(--text-primary), transparent);
+  transform-origin: top;
+}
+
+.hero__scroll-text {
+  font-size: 0.625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Hero marquee */
+.hero__marquee {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--divider);
+  background: var(--background);
+}
+
+.hero__marquee-item {
+  font-size: var(--small);
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hero__marquee-divider {
+  color: var(--accent);
+  font-size: var(--small);
+}
+
+/* Legacy scroll indicator (fallback) */
 .scroll-indicator {
   position: absolute;
   bottom: 4rem;
@@ -642,12 +698,13 @@ button:focus-visible {
 
 .expertise__item {
   display: grid;
-  grid-template-columns: minmax(6rem, 1fr) 4fr;
+  grid-template-columns: minmax(6rem, 1fr) 4fr auto;
   gap: 3rem;
   padding: 4rem 0;
   border-bottom: 1px solid var(--divider);
   position: relative;
   transition: background-color var(--duration-normal) var(--easing);
+  cursor: pointer;
 }
 
 .expertise__item::before {
@@ -724,6 +781,29 @@ button:focus-visible {
   color: var(--text-secondary);
   max-width: 550px;
   line-height: 1.7;
+}
+
+.expertise__arrow {
+  font-size: var(--title-l);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-normal) var(--easing),
+              color var(--duration-normal) var(--easing);
+  position: relative;
+  z-index: 1;
+}
+
+.expertise__item:hover .expertise__arrow {
+  transform: translateX(0.5rem);
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .expertise__arrow {
+    display: none;
+  }
 }
 
 /* =============================================
@@ -1083,44 +1163,67 @@ button:focus-visible {
 }
 
 /* =============================================
-   CUSTOM CURSOR
+   NOISE TEXTURE OVERLAY
+   ============================================= */
+
+.noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* =============================================
+   CUSTOM CURSOR (Framer Motion)
    ============================================= */
 
 .cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 10px;
-  height: 10px;
-  background-color: var(--accent);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  will-change: transform, width, height;
-  transition: width var(--duration-normal) var(--easing),
-              height var(--duration-normal) var(--easing),
-              opacity var(--duration-fast) var(--easing);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
 }
 
-.cursor.is-hovering {
-  width: 40px;
-  height: 40px;
-}
-
-.cursor.is-clicking {
-  width: 8px;
-  height: 8px;
-}
-
-.cursor.is-hidden {
-  opacity: 0;
+.cursor__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--background);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 @media (hover: none) and (pointer: coarse) {
   .cursor {
     display: none;
   }
+}
+
+/* =============================================
+   MARQUEE
+   ============================================= */
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee__inner {
+  display: flex;
+  gap: 4rem;
+  white-space: nowrap;
 }
 
 /* =============================================
@@ -1174,6 +1277,475 @@ button:focus-visible {
 }
 
 /* =============================================
+   PREMIUM EFFECTS
+   ============================================= */
+
+/* Animated gradient text */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--accent) 0%,
+    #00d4ff 25%,
+    var(--accent) 50%,
+    #ff6b6b 75%,
+    var(--accent) 100%
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glow effect on accent elements */
+.glow {
+  box-shadow: 0 0 20px rgba(160, 192, 0, 0.3),
+              0 0 40px rgba(160, 192, 0, 0.1);
+}
+
+.glow-text {
+  text-shadow: 0 0 30px rgba(160, 192, 0, 0.5);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Premium hover lift with glow */
+.hover-lift {
+  transition: transform var(--duration-normal) var(--easing),
+              box-shadow var(--duration-normal) var(--easing);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+              0 0 30px rgba(160, 192, 0, 0.15);
+}
+
+/* Shimmer effect for loading/reveal */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+
+/* Floating animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse glow effect */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(160, 192, 0, 0.3),
+                0 0 10px rgba(160, 192, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(160, 192, 0, 0.5),
+                0 0 40px rgba(160, 192, 0, 0.3);
+  }
+}
+
+/* Magnetic button base styles */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  font-size: var(--body);
+  font-weight: 500;
+  color: #141414;
+  background: var(--accent);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--duration-fast) var(--easing);
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--accent) 0%, #c8f000 100%);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing);
+}
+
+.magnetic-btn:hover::before {
+  opacity: 1;
+}
+
+.magnetic-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Split text reveal animation */
+.split-reveal {
+  overflow: hidden;
+}
+
+.split-reveal__char {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  animation: charReveal 0.6s var(--easing) forwards;
+}
+
+@keyframes charReveal {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Line reveal animation */
+.line-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.line-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  transform: scaleX(1);
+  transform-origin: right;
+  animation: lineReveal 1s var(--easing) forwards;
+}
+
+@keyframes lineReveal {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Stagger delay utilities */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* =============================================
+   ENHANCED HERO EFFECTS
+   ============================================= */
+
+.hero__title .hero__word {
+  position: relative;
+}
+
+.hero__title .hero__word::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--easing);
+}
+
+.hero__title:hover .hero__word::after {
+  transform: scaleX(1);
+}
+
+/* Enhanced bio with border animation */
+.hero__bio {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.hero__bio::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: bioLineReveal 1s var(--easing) 1.2s forwards;
+}
+
+@keyframes bioLineReveal {
+  to { height: 100%; }
+}
+
+/* =============================================
+   ENHANCED EXPERTISE EFFECTS
+   ============================================= */
+
+.expertise__item {
+  position: relative;
+}
+
+.expertise__item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.8s var(--easing);
+}
+
+.expertise__item:hover::after {
+  width: 100%;
+}
+
+.expertise__number {
+  background: linear-gradient(135deg, var(--text-tertiary), var(--text-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all var(--duration-normal) var(--easing);
+}
+
+.expertise__item:hover .expertise__number {
+  background: linear-gradient(135deg, var(--accent), #00d4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =============================================
+   ENHANCED WORK CARDS
+   ============================================= */
+
+.work-card {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.work-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--accent), #00d4ff, var(--accent));
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing);
+  animation: borderGlow 3s linear infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.work-card:hover::before {
+  opacity: 1;
+}
+
+.work-card__image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing);
+}
+
+.work-card:hover .work-card__image::after {
+  opacity: 1;
+}
+
+/* =============================================
+   REVEAL ANIMATIONS
+   ============================================= */
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--easing),
+              transform 0.8s var(--easing);
+}
+
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s var(--easing),
+              transform 0.8s var(--easing);
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-blur {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.8s var(--easing),
+              filter 0.8s var(--easing);
+}
+
+.reveal-blur.is-visible {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* =============================================
+   BLOB/GRADIENT BACKGROUND
+   ============================================= */
+
+.blob-bg {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.15;
+  background: radial-gradient(circle at 30% 20%, rgba(160, 192, 0, 0.4) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(255, 107, 107, 0.2) 0%, transparent 50%);
+  animation: blobMove 20s ease-in-out infinite;
+}
+
+@keyframes blobMove {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(5%, 5%) rotate(5deg); }
+  50% { transform: translate(-5%, 10%) rotate(-5deg); }
+  75% { transform: translate(10%, -5%) rotate(3deg); }
+}
+
+/* =============================================
+   MICRO-INTERACTIONS
+   ============================================= */
+
+/* Click ripple effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.ripple:active::after {
+  transform: scale(2);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Enhanced focus states */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(160, 192, 0, 0.2);
+}
+
+/* Interactive hover for all clickable elements */
+[data-cursor="text"],
+[data-cursor="hover"] {
+  cursor: none;
+}
+
+/* =============================================
+   LOADING STATE
+   ============================================= */
+
+.page-loading {
+  position: fixed;
+  inset: 0;
+  background: var(--background);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--divider);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =============================================
    UTILITIES
    ============================================= */
 
@@ -1186,4 +1758,35 @@ button:focus-visible {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* Text utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow {
+  text-shadow: 0 0 40px rgba(160, 192, 0, 0.6),
+               0 0 80px rgba(160, 192, 0, 0.3);
+}
+
+/* Smooth transition utilities */
+.transition-all {
+  transition: all var(--duration-normal) var(--easing);
+}
+
+.transition-slow {
+  transition: all var(--duration-slow) var(--easing);
+}
+
+/* Scale on hover */
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.02);
 }

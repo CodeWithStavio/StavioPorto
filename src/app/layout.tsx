@@ -5,6 +5,8 @@ import Footer from '@/components/Footer'
 import CustomCursor from '@/components/CustomCursor'
 import Grid from '@/components/Grid'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import SmoothScroll from '@/components/effects/SmoothScroll'
+import LoadingScreen from '@/components/effects/LoadingScreen'
 
 export const metadata: Metadata = {
   title: 'App Developer - Mustafa Alhassny',
@@ -20,11 +22,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <Grid />
-          <CustomCursor />
-          <Navigation />
-          <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
-          <Footer />
+          <LoadingScreen />
+          <SmoothScroll>
+            <div className="blob-bg" aria-hidden="true" />
+            <div className="noise" />
+            <Grid />
+            <CustomCursor />
+            <Navigation />
+            <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
+            <Footer />
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
