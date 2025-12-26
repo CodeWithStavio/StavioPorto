@@ -5,6 +5,7 @@ import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false)
+  const [isDark, setIsDark] = useState(false)
   const [cursorVariant, setCursorVariant] = useState<'default' | 'hover' | 'text' | 'hidden'>('default')
   const [cursorText, setCursorText] = useState('')
 
@@ -20,6 +21,16 @@ export default function CustomCursor() {
     if (!hasMouseDevice) return
 
     setIsVisible(true)
+
+    // Check theme
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
+    checkTheme()
+
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX)
@@ -56,6 +67,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseleave', handleMouseLeave)
 
     return () => {
+      observer.disconnect()
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseleave', handleMouseLeave)
@@ -64,21 +76,24 @@ export default function CustomCursor() {
 
   if (!isVisible) return null
 
+  // Dark theme = white cursor, Light theme = black cursor
+  const cursorColor = isDark ? '#fafafa' : '#0a0a0a'
+
   const variants = {
     default: {
-      width: 12,
-      height: 12,
-      backgroundColor: 'var(--foreground)',
+      width: 14,
+      height: 14,
+      backgroundColor: cursorColor,
     },
     hover: {
       width: 50,
       height: 50,
-      backgroundColor: 'var(--foreground)',
+      backgroundColor: cursorColor,
     },
     text: {
       width: 80,
       height: 80,
-      backgroundColor: 'var(--foreground)',
+      backgroundColor: cursorColor,
     },
     hidden: {
       width: 0,
