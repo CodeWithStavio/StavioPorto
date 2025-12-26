@@ -151,6 +151,10 @@ body {
   transition: background-color var(--duration) var(--ease),
               color var(--duration) var(--ease);
   cursor: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Hide cursor on desktop only */
@@ -1184,26 +1188,21 @@ button {
   left: 0;
   width: 12px;
   height: 12px;
-  background-color: var(--foreground);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: width 0.2s var(--ease), height 0.2s var(--ease);
-}
-
-.cursor.is-hovering {
-  width: 40px;
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cursor__text {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--background);
+  white-space: nowrap;
 }
 
 @media (hover: none) {
@@ -1233,10 +1232,7 @@ button {
   background: var(--text-secondary);
 }
 
-::selection {
-  background-color: var(--foreground);
-  color: var(--background);
-}
+/* Text selection disabled */
 
 /* =============================================
    ANIMATIONS

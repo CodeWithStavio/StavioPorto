@@ -78,6 +78,7 @@ export default function CustomCursor() {
 
   // Dark theme = white cursor, Light theme = black cursor
   const cursorColor = isDark ? '#fafafa' : '#0a0a0a'
+  const textColor = isDark ? '#0a0a0a' : '#fafafa'
 
   const variants = {
     default: {
@@ -89,6 +90,7 @@ export default function CustomCursor() {
       width: 50,
       height: 50,
       backgroundColor: cursorColor,
+      opacity: 0.9,
     },
     text: {
       width: 80,
@@ -116,6 +118,7 @@ export default function CustomCursor() {
       {cursorVariant === 'text' && (
         <motion.span
           className="cursor__text"
+          style={{ color: textColor }}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.5 }}
