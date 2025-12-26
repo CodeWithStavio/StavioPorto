@@ -1,34 +1,12 @@
 import Link from 'next/link'
-
-const projects = [
-  {
-    number: '01',
-    title: 'Divvy',
-    description: 'A mobile app for splitting bills and managing shared expenses with friends and family.',
-    color: '#f60',
-    tags: ['React Native', 'Node.js', 'MongoDB'],
-  },
-  {
-    number: '02',
-    title: 'F.U.S.E',
-    description: 'Full-stack mobile application with comprehensive backend infrastructure and hosting.',
-    color: '#574bc1',
-    tags: ['React Native', 'Express', 'AWS'],
-  },
-  {
-    number: '03',
-    title: 'AceLounge',
-    description: 'Complete mobile solution with DevOps pipeline and cloud hosting infrastructure.',
-    color: '#000f14',
-    tags: ['React Native', 'Docker', 'Kubernetes'],
-  },
-]
+import { PROJECTS, COPY } from '@/constants'
+import SectionHeader from '@/components/ui/SectionHeader'
 
 export default function Work() {
   return (
     <>
       {/* Header */}
-      <section className="work-header">
+      <section className="page-hero">
         <div className="container">
           <h1 className="title-xxl">
             <span style={{ display: 'block' }}>Results:</span>
@@ -40,19 +18,16 @@ export default function Work() {
       {/* Work Cards */}
       <section className="work-section">
         <div className="container">
-          <div className="section-header">
-            <span>[A]</span>
-            <span>Work</span>
-          </div>
+          <SectionHeader label="[A]" title="Work" />
 
           <div className="work-grid">
-            {projects.map((project) => (
-              <div key={project.number} className="work-card">
+            {PROJECTS.map((project) => (
+              <div key={project.id} className="work-card">
                 <div
                   className="work-card__image"
                   style={{ backgroundColor: project.color }}
                 >
-                  <span className="work-card__number">{project.number}</span>
+                  <span className="work-card__number">{project.id}</span>
                 </div>
                 <div className="work-card__content">
                   <h3 className="work-card__title">{project.title}</h3>
@@ -72,9 +47,9 @@ export default function Work() {
       {/* CTA */}
       <section className="cta">
         <div className="container">
-          <h2 className="cta__title">Ready to Bring Your Vision to Life?</h2>
-          <Link href="/contact" className="contact__email">
-            Contact
+          <h2 className="cta__title">{COPY.cta.title}</h2>
+          <Link href="/contact" className="cta__link">
+            {COPY.cta.buttonText}
           </Link>
         </div>
       </section>
