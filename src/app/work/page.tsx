@@ -49,17 +49,14 @@ export default function Work() {
           {projects.map((project) => (
             <div key={project.number} className="work-item">
               <span className="work-item__number">{project.number}</span>
-              <div
-                className="work-item__thumbnail"
-                style={{ backgroundColor: project.color }}
-              >
-                {/* Placeholder - uncomment when assets are available */}
-                {/* <Image
+              <div className="work-item__thumbnail">
+                <Image
                   src={project.thumbnail}
                   alt={project.title}
                   width={96}
                   height={64}
-                /> */}
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
               <h3 className="work-item__title">{project.title}</h3>
               <div className="work-item__stack">
