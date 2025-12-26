@@ -7,6 +7,7 @@ import Grid from '@/components/Grid'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import SmoothScroll from '@/components/effects/SmoothScroll'
 import LoadingScreen from '@/components/effects/LoadingScreen'
+import ScrollProgress from '@/components/effects/ScrollProgress'
 
 export const metadata: Metadata = {
   title: 'App Developer - Mustafa Alhassny',
@@ -24,7 +25,8 @@ export default function RootLayout({
         <ThemeProvider>
           <LoadingScreen />
           <SmoothScroll>
-            <div className="blob-bg" aria-hidden="true" />
+            <ScrollProgress />
+            <div className="ambient-glow" aria-hidden="true" />
             <div className="noise" />
             <Grid />
             <CustomCursor />
