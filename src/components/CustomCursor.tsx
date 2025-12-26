@@ -1,79 +1,48 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [position, setPosition] = useState({ x: -100, y: -100 })
   const [isHovering, setIsHovering] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    setPosition({ x: e.clientX, y: e.clientY })
-    if (!isVisible) setIsVisible(true)
-  }, [isVisible])
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovering(true)
-  }, [])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false)
-  }, [])
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove)
+    const handleMouseMove = (e: MouseEvent) => {
+      setPosition({ x: e.clientX, y: e.clientY })
+    }
 
-    const interactiveElements = document.querySelectorAll('a, button, [data-cursor-hover]')
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, [data-hover]')) {
+        setIsHovering(true)
+      }
+    }
 
-    interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', handleMouseEnter)
-      el.addEventListener('mouseleave', handleMouseLeave)
-    })
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, [data-hover]')) {
+        setIsHovering(false)
+      }
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseover', handleMouseOver)
+    document.addEventListener('mouseout', handleMouseOut)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleMouseEnter)
-        el.removeEventListener('mouseleave', handleMouseLeave)
-      })
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseover', handleMouseOver)
+      document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [handleMouseMove, handleMouseEnter, handleMouseLeave])
-
-  // Re-attach listeners when DOM changes
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const interactiveElements = document.querySelectorAll('a, button, [data-cursor-hover]')
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleMouseEnter)
-        el.removeEventListener('mouseleave', handleMouseLeave)
-        el.addEventListener('mouseenter', handleMouseEnter)
-        el.addEventListener('mouseleave', handleMouseLeave)
-      })
-    })
-
-    observer.observe(document.body, { childList: true, subtree: true })
-
-    return () => observer.disconnect()
-  }, [handleMouseEnter, handleMouseLeave])
-
-  if (!isVisible) return null
+  }, [])
 
   return (
-    <>
-      <div
-        className={`cursor ${isHovering ? 'hover' : ''}`}
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
-      />
-      <div
-        className="cursor-text"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
-      />
-    </>
+    <div
+      className={`custom-cursor ${isHovering ? 'hovering' : ''}`}
+      style={{
+        left: position.x,
+        top: position.y,
+      }}
+    />
   )
 }

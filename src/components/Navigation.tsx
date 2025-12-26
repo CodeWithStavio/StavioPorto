@@ -16,23 +16,21 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm">
-        <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group" data-cursor-hover>
+          <Link href="/" className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-background font-medium text-xs">
+              <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white font-medium text-xs">
                 MA
               </div>
               <div className="status-dot" />
             </div>
-            <span className="text-base font-medium tracking-tight">
-              Mustafa Alhassny
-            </span>
+            <span className="text-sm font-medium">Mustafa Alhassny</span>
           </Link>
 
-          {/* Desktop Nav Links (hidden on mobile, shown on large screens) */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* Desktop Links */}
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -46,7 +44,6 @@ export default function Navigation() {
               <button
                 onClick={toggleTheme}
                 className="nav-link text-sm text-secondary-text flex items-center gap-1"
-                data-cursor-hover
               >
                 {theme === 'light' ? 'Dark' : 'Light'}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -56,51 +53,41 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Menu Button (shown on mobile and tablet) */}
+          {/* Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="menu-btn lg:hidden"
-            data-cursor-hover
+            className="menu-btn"
           >
             Menu
-            <span className="text-lg leading-none">{menuOpen ? '×' : '+'}</span>
-          </button>
-
-          {/* Desktop Menu Button */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="menu-btn hidden lg:flex"
-            data-cursor-hover
-          >
-            Menu
-            <span className="text-lg leading-none">{menuOpen ? '×' : '+'}</span>
+            <span className="text-base">{menuOpen ? '×' : '+'}</span>
           </button>
         </div>
       </nav>
 
-      {/* Full Screen Menu Overlay */}
+      {/* Full Screen Menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-background pt-24 px-6 md:px-12">
-          <div className="max-w-[1800px] mx-auto">
-            <nav className="space-y-6">
+        <div className="fixed inset-0 z-40 bg-background pt-20 px-6">
+          <div className="max-w-6xl mx-auto pt-8">
+            <div className="space-y-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block text-5xl md:text-7xl font-medium hover:text-accent transition-colors"
-                  data-cursor-hover
+                  className="block text-4xl md:text-6xl font-medium hover:text-accent transition-colors"
                 >
                   {link.text}
                 </Link>
               ))}
-            </nav>
+            </div>
 
             {mounted && (
               <button
-                onClick={toggleTheme}
-                className="mt-12 text-xl text-secondary-text hover:text-accent transition-colors"
-                data-cursor-hover
+                onClick={() => {
+                  toggleTheme()
+                  setMenuOpen(false)
+                }}
+                className="mt-10 text-lg text-secondary-text hover:text-accent transition-colors"
               >
                 Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
               </button>

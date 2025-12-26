@@ -6,11 +6,11 @@ const dynamicWords = ['Talent', 'Success', 'Involvement', 'Growth']
 
 export default function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [previousIndex, setPreviousIndex] = useState(-1)
+  const [prevWord, setPrevWord] = useState('')
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPreviousIndex(currentIndex)
+      setPrevWord(dynamicWords[currentIndex])
       setCurrentIndex((prev) => (prev + 1) % dynamicWords.length)
     }, 3000)
 
@@ -18,29 +18,24 @@ export default function Hero() {
   }, [currentIndex])
 
   return (
-    <section className="min-h-screen flex items-center px-6 md:px-12 pt-20 pb-16 relative">
-      <div className="max-w-[1800px] mx-auto w-full">
+    <section className="min-h-screen flex items-center px-6 md:px-12 pt-24 pb-20 relative">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Label */}
-        <p className="label mb-6">Mobile App Developer</p>
+        <p className="label mb-4">Mobile App Developer</p>
 
         {/* Main Heading */}
-        <h1 className="heading mb-8">
+        <h1 className="heading mb-6">
           <span className="block">Elevate your</span>
-          {/* Word stack showing current and previous */}
-          <span className="block relative">
-            <span className="text-accent transition-all duration-500 ease-out">
-              {dynamicWords[currentIndex]}
-            </span>
-          </span>
-          {previousIndex >= 0 && (
-            <span className="block text-muted opacity-30 transition-opacity duration-500">
-              {dynamicWords[previousIndex]}
+          <span className="block text-accent">{dynamicWords[currentIndex]}</span>
+          {prevWord && (
+            <span className="block text-gray-300 dark:text-gray-700 opacity-40 text-[0.6em]">
+              {prevWord}
             </span>
           )}
         </h1>
 
         {/* Bio */}
-        <div className="max-w-2xl mt-12">
+        <div className="max-w-xl mt-10">
           <p className="body-text text-secondary-text">
             I&apos;m <span className="text-primary-text font-medium">Mustafa Alhassny</span>, a dedicated Mobile App Developer with expertise in React Native and backend architecture.
           </p>
@@ -50,7 +45,7 @@ export default function Hero() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="scroll-indicator absolute bottom-12 left-1/2 -translate-x-1/2">
+        <div className="scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2">
           <span>Scroll</span>
           <div className="scroll-line" />
         </div>
