@@ -15,7 +15,19 @@ const navLinks = [
 export default function Navigation() {
   const { theme, toggleTheme, mounted } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+
+  // Scroll detection for navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+
+    handleScroll() // Check initial state
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -29,9 +41,15 @@ export default function Navigation() {
     }
   }, [menuOpen])
 
+  // Check if link is active
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
+
   return (
     <>
-      <nav className="navbar">
+      <nav className={`navbar ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="container">
           <div className="navbar__inner">
             {/* Left - Logo */}
@@ -56,7 +74,7 @@ export default function Navigation() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="navbar__link"
+                    className={`navbar__link ${isActive(link.href) ? 'is-active' : ''}`}
                   >
                     {link.text}
                   </Link>
@@ -71,7 +89,9 @@ export default function Navigation() {
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="navbar__menu-btn"
+                className={`navbar__menu-btn ${menuOpen ? 'is-open' : ''}`}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
               >
                 <span>Menu</span>
                 <span>{menuOpen ? '×' : '+'}</span>
@@ -90,7 +110,7 @@ export default function Navigation() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="menu-overlay__link"
+                className={`menu-overlay__link ${isActive(link.href) ? 'is-active' : ''}`}
               >
                 {link.text}
               </Link>
