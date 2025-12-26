@@ -15,7 +15,8 @@ const config: Config = {
         'primary-text': 'var(--primary-text)',
         'secondary-text': 'var(--secondary-text)',
         accent: 'var(--accent)',
-        'accent-hover': 'var(--accent-hover)',
+        'accent-light': 'var(--accent-light)',
+        muted: 'var(--muted)',
       },
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
