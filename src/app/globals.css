@@ -123,7 +123,6 @@
 
 html {
   font-size: 1rem;
-  scroll-behavior: smooth;
 }
 
 @media screen and (max-width: 1920px) {
