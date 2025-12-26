@@ -68,17 +68,17 @@ export default function CustomCursor() {
     default: {
       width: 12,
       height: 12,
-      backgroundColor: 'var(--accent)',
+      backgroundColor: 'var(--foreground)',
     },
     hover: {
-      width: 60,
-      height: 60,
-      backgroundColor: 'var(--accent)',
+      width: 50,
+      height: 50,
+      backgroundColor: 'var(--foreground)',
     },
     text: {
-      width: 100,
-      height: 100,
-      backgroundColor: 'var(--text-primary)',
+      width: 80,
+      height: 80,
+      backgroundColor: 'var(--foreground)',
     },
     hidden: {
       width: 0,
