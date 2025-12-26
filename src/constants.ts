@@ -47,6 +47,7 @@ export const PROJECTS = [
     title: 'Divvy',
     description: 'A mobile app for splitting bills and managing shared expenses with friends and family.',
     color: '#f60',
+    image: '/assets/Divvy.avif',
     tags: ['React Native', 'Node.js', 'MongoDB'],
   },
   {
@@ -54,6 +55,7 @@ export const PROJECTS = [
     title: 'F.U.S.E',
     description: 'Full-stack mobile application with comprehensive backend infrastructure and hosting.',
     color: '#574bc1',
+    image: '/assets/Fuse.avif',
     tags: ['React Native', 'Express', 'AWS'],
   },
   {
@@ -61,6 +63,7 @@ export const PROJECTS = [
     title: 'AceLounge',
     description: 'Complete mobile solution with DevOps pipeline and cloud hosting infrastructure.',
     color: '#000f14',
+    image: '/assets/AceLounge.avif',
     tags: ['React Native', 'Docker', 'Kubernetes'],
   },
 ]

@@ -91,6 +91,12 @@ body {
   overflow-x: hidden;
   transition: background-color var(--duration-slow) var(--easing),
               color var(--duration-slow) var(--easing);
+  cursor: none;
+}
+
+/* Hide default cursor on all elements */
+*, *::before, *::after {
+  cursor: none !important;
 }
 
 a {
@@ -852,6 +858,20 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.work-card__img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--easing),
+              opacity var(--duration-normal) var(--easing);
+}
+
+.work-card:hover .work-card__img {
+  transform: scale(1.05);
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

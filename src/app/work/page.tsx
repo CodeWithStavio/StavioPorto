@@ -77,6 +77,11 @@ export default function Work() {
                     data-cursor="text"
                     data-cursor-text="View"
                   >
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="work-card__img"
+                    />
                     <motion.span
                       className="work-card__number"
                       initial={{ scale: 0.8, opacity: 0 }}
