@@ -21,31 +21,29 @@ const expertiseItems = [
 
 export default function Expertise() {
   return (
-    <section className="py-24 px-6 md:px-12">
-      <div className="max-w-[1800px] mx-auto">
-        {/* Section Header with line */}
-        <div className="section-header mb-16">
-          <span className="text-secondary-text text-sm">[B]</span>
-          <span className="text-secondary-text text-sm">Expertise</span>
+    <section className="u-section">
+      <div className="u-container">
+        {/* Section Header */}
+        <div className="section__head">
+          <span>[B]</span>
+          <span>Expertise</span>
         </div>
 
         {/* Expertise Items */}
-        <div className="space-y-0">
+        <div>
           {expertiseItems.map((item) => (
-            <div
-              key={item.id}
-              className="expertise-item"
-              data-cursor-hover
-            >
-              {/* Big Faded Number */}
-              <div className="big-number">{item.id}</div>
+            <div key={item.id} className="exp" data-cursor-hover>
+              <div className="u-container">
+                <div className="exp__grid">
+                  {/* Big Faded Number */}
+                  <div className="exp__number">{item.id}</div>
 
-              {/* Content */}
-              <div className="relative z-10 pt-16 md:pt-24">
-                <h3 className="expertise-title">{item.title}</h3>
-                <p className="body-text text-secondary-text max-w-2xl">
-                  {item.description}
-                </p>
+                  {/* Content */}
+                  <div className="exp__content">
+                    <h3 className="exp__title">{item.title}</h3>
+                    <p className="exp__desc">{item.description}</p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
