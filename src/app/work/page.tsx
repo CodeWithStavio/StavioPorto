@@ -77,11 +77,13 @@ export default function Work() {
                     data-cursor="text"
                     data-cursor-text="View"
                   >
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="work-card__img"
-                    />
+                    {project.image && (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="work-card__img"
+                      />
+                    )}
                     <motion.span
                       className="work-card__number"
                       initial={{ scale: 0.8, opacity: 0 }}
@@ -92,7 +94,12 @@ export default function Work() {
                     </motion.span>
                   </div>
                   <div className="work-card__content">
-                    <h3 className="work-card__title">{project.title}</h3>
+                    <div className="work-card__header">
+                      <h3 className="work-card__title">{project.title}</h3>
+                      {project.subtitle && (
+                        <span className="work-card__subtitle">{project.subtitle}</span>
+                      )}
+                    </div>
                     <p className="work-card__description">{project.description}</p>
                     <div className="work-card__tags">
                       {project.tags.map((tag, i) => (

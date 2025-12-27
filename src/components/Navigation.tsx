@@ -40,7 +40,7 @@ export default function Navigation() {
       <nav className={`navbar ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="container">
           <div className="navbar__inner">
-            <Link href="/" className="navbar__left">
+            <Link href="/" className="navbar__left" data-cursor-default>
               <div className="navbar__image">
                 <Image
                   src="/assets/Me.jpg"
@@ -61,12 +61,13 @@ export default function Navigation() {
                     key={link.href}
                     href={link.href}
                     className={`navbar__link ${isActive(link.href) ? 'is-active' : ''}`}
+                    data-cursor-default
                   >
                     {link.text}
                   </Link>
                 ))}
                 {mounted && (
-                  <button onClick={toggleTheme} className="navbar__theme">
+                  <button onClick={toggleTheme} className="navbar__theme" data-cursor-default>
                     {theme === 'light' ? 'Dark' : 'Light'}
                   </button>
                 )}
@@ -77,6 +78,7 @@ export default function Navigation() {
                 className={`navbar__menu-btn ${menuOpen ? 'is-open' : ''}`}
                 aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={menuOpen}
+                data-cursor-default
               >
                 <span>Menu</span>
                 <span>{menuOpen ? '×' : '+'}</span>

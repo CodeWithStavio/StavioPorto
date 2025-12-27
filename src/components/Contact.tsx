@@ -99,15 +99,17 @@ export default function Contact({ variant = 'home' }: ContactProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 >
-                  <AnimatedLink
+                  <a
                     href={social.href}
-                    external
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="contact__social-link"
+                    data-cursor-default
                   >
-                    {social.name}
-                  </AnimatedLink>
+                    <span className="contact__social-text">{social.name}</span>
+                    <span className="contact__social-arrow">→</span>
+                  </a>
                 </motion.div>
               ))}
             </div>
@@ -172,15 +174,17 @@ export default function Contact({ variant = 'home' }: ContactProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 >
-                  <AnimatedLink
+                  <a
                     href={social.href}
-                    external
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="contact__social-link"
+                    data-cursor-default
                   >
-                    {social.name}
-                  </AnimatedLink>
+                    <span className="contact__social-text">{social.name}</span>
+                    <span className="contact__social-arrow">→</span>
+                  </a>
                 </motion.div>
               ))}
             </div>
