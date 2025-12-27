@@ -122,13 +122,12 @@ export default function CustomCursor() {
   const trailColor = isDark ? 'rgba(250, 250, 250, 0.3)' : 'rgba(10, 10, 10, 0.3)'
   const glowBorderColor = isDark ? 'rgba(250, 250, 250, 0.4)' : 'rgba(10, 10, 10, 0.4)'
 
-  // Hover colors - more transparent, theme-appropriate
-  const hoverBgColor = isDark ? 'rgba(250, 250, 250, 0.15)' : 'rgba(10, 10, 10, 0.08)'
-  const hoverBorderColor = isDark ? 'rgba(250, 250, 250, 0.5)' : 'rgba(10, 10, 10, 0.3)'
+  // Hover colors - just border, no fill
+  const hoverBorderColor = isDark ? 'rgba(250, 250, 250, 0.6)' : 'rgba(10, 10, 10, 0.4)'
 
-  // Text cursor - semi-transparent with backdrop blur
-  const textBgColor = isDark ? 'rgba(10, 10, 10, 0.85)' : 'rgba(250, 250, 250, 0.85)'
-  const textBorderColor = isDark ? 'rgba(250, 250, 250, 0.3)' : 'rgba(10, 10, 10, 0.2)'
+  // Text cursor - light tint so text is readable but content shows through
+  const textBgColor = isDark ? 'rgba(10, 10, 10, 0.6)' : 'rgba(250, 250, 250, 0.6)'
+  const textBorderColor = isDark ? 'rgba(250, 250, 250, 0.4)' : 'rgba(10, 10, 10, 0.25)'
 
   const variants = {
     default: {
@@ -140,8 +139,8 @@ export default function CustomCursor() {
     hover: {
       width: 50,
       height: 50,
-      backgroundColor: hoverBgColor,
-      border: `1px solid ${hoverBorderColor}`,
+      backgroundColor: 'transparent',
+      border: `1.5px solid ${hoverBorderColor}`,
     },
     text: {
       width: 80,
