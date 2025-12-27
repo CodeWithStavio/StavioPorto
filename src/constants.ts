@@ -45,7 +45,7 @@ export const PROJECTS = [
   {
     id: '01',
     title: 'Wave',
-    description: 'AI-powered deepfake and fake news detection platform using Wav2Vec2 and XLM-RoBERTa models.',
+    description: 'AI-powered deepfake and fake news detection platform using Wav2Vec2 and XLM-RoBERTa models with Flutter mobile app.',
     color: '#1a1a2e',
     image: '/assets/Divvy.avif',
     tags: ['PyTorch', 'Flutter', 'FastAPI', 'NLP'],
@@ -53,20 +53,45 @@ export const PROJECTS = [
   {
     id: '02',
     title: 'F.U.S.E',
-    description: 'Financial ecosystem with mobile wallets, P2P transfers, and AI-driven fraud detection on 2.7M transactions.',
+    description: 'Financial ecosystem with mobile wallets, P2P transfers, and AI-driven fraud detection trained on 2.7M transactions.',
     color: '#574bc1',
     image: '/assets/Fuse.avif',
-    tags: ['React Native', 'XGBoost', 'PostgreSQL'],
+    tags: ['React Native', 'XGBoost', 'PostgreSQL', 'Next.js'],
   },
   {
     id: '03',
+    title: 'Zones',
+    description: 'World clock and timezone collaboration app with expense sharing, reducing settlement time by 40% for groups.',
+    color: '#2d3436',
+    image: '/assets/AceLounge.avif',
+    tags: ['React Native', 'Expo', 'Zustand', 'Firebase'],
+  },
+  {
+    id: '04',
+    title: 'Bima',
+    description: 'Insurance management mobile app published on iOS and Android with Vite web frontend and Laravel backend.',
+    color: '#0984e3',
+    image: '/assets/Fuse.avif',
+    tags: ['React Native', 'Laravel', 'Vite', 'Inertia.js'],
+  },
+  {
+    id: '05',
     title: 'AceLounge',
-    description: 'Hospitality order management app that improved table turnover by 15% with real-time data sync.',
+    description: 'Hospitality order management app that improved table turnover by 15% with real-time data synchronization.',
     color: '#000f14',
     image: '/assets/AceLounge.avif',
     tags: ['React Native', 'Node.js', 'Real-time'],
   },
 ]
+
+export const SKILLS = {
+  languages: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C++'],
+  frameworks: ['React', 'React Native', 'Next.js', 'Tailwind CSS', 'Redux Toolkit', 'Zustand', 'Node.js', 'Express', 'FastAPI', 'Flask', 'Laravel', 'Prisma'],
+  databases: ['PostgreSQL', 'MongoDB', 'Firebase', 'Redis', 'SQL'],
+  devops: ['Git', 'Docker', 'REST APIs', 'JWT', 'CI/CD', 'Expo', 'App Store', 'Google Play'],
+  aiml: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'XGBoost', 'LSTM', 'RNN', 'NLP', 'Feature Engineering'],
+  security: ['RSA/AES-256 Encryption', 'Secure API Design', 'JWT Authentication'],
+}
 
 export const ROTATING_WORDS = ['Growth', 'Talent', 'Success', 'Involvement', 'Growth']
 

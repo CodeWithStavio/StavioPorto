@@ -99,10 +99,10 @@ export default function Hero() {
           animate={mounted ? 'visible' : 'hidden'}
         >
           <p>
-            I&apos;m <strong>{SITE_CONFIG.name}</strong>, a dedicated Mobile App Developer
-            with expertise in React Native and backend architecture. With{' '}
+            I&apos;m <strong>{SITE_CONFIG.name}</strong>, an AI specialist and full-stack developer
+            with expertise in machine learning, React Native, and modern web technologies. With{' '}
             <span className="hero__accent">{SITE_CONFIG.yearsExperience} years</span> of
-            experience, I specialize in crafting scalable and user-centric applications.
+            experience, I build AI-powered platforms and cross-platform applications that drive business growth.
           </p>
         </motion.div>
 
@@ -132,15 +132,21 @@ export default function Hero() {
       {/* Marquee at bottom */}
       <div className="hero__marquee">
         <Marquee speed={30}>
-          <span className="hero__marquee-item">Mobile Development</span>
+          <span className="hero__marquee-item">AI & Machine Learning</span>
           <span className="hero__marquee-divider">✦</span>
           <span className="hero__marquee-item">React Native</span>
           <span className="hero__marquee-divider">✦</span>
-          <span className="hero__marquee-item">Full Stack</span>
+          <span className="hero__marquee-item">PyTorch & TensorFlow</span>
           <span className="hero__marquee-divider">✦</span>
-          <span className="hero__marquee-item">UI/UX Design</span>
+          <span className="hero__marquee-item">Next.js</span>
           <span className="hero__marquee-divider">✦</span>
-          <span className="hero__marquee-item">Backend Architecture</span>
+          <span className="hero__marquee-item">Full Stack Development</span>
+          <span className="hero__marquee-divider">✦</span>
+          <span className="hero__marquee-item">NLP & Deepfake Detection</span>
+          <span className="hero__marquee-divider">✦</span>
+          <span className="hero__marquee-item">Node.js & FastAPI</span>
+          <span className="hero__marquee-divider">✦</span>
+          <span className="hero__marquee-item">PostgreSQL & MongoDB</span>
           <span className="hero__marquee-divider">✦</span>
         </Marquee>
       </div>
