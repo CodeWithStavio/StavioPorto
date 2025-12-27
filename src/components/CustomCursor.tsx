@@ -126,8 +126,9 @@ export default function CustomCursor() {
   const hoverBgColor = isDark ? 'rgba(250, 250, 250, 0.15)' : 'rgba(10, 10, 10, 0.08)'
   const hoverBorderColor = isDark ? 'rgba(250, 250, 250, 0.5)' : 'rgba(10, 10, 10, 0.3)'
 
-  // Text cursor - transparent with border
-  const textBorderColor = isDark ? 'rgba(250, 250, 250, 0.6)' : 'rgba(10, 10, 10, 0.4)'
+  // Text cursor - semi-transparent with backdrop blur
+  const textBgColor = isDark ? 'rgba(10, 10, 10, 0.85)' : 'rgba(250, 250, 250, 0.85)'
+  const textBorderColor = isDark ? 'rgba(250, 250, 250, 0.3)' : 'rgba(10, 10, 10, 0.2)'
 
   const variants = {
     default: {
@@ -145,8 +146,8 @@ export default function CustomCursor() {
     text: {
       width: 80,
       height: 80,
-      backgroundColor: 'transparent',
-      border: `1.5px solid ${textBorderColor}`,
+      backgroundColor: textBgColor,
+      border: `1px solid ${textBorderColor}`,
     },
     hidden: {
       width: 0,
