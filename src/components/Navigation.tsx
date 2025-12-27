@@ -1,0 +1,121 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useTheme } from './ThemeProvider'
+import { NAV_LINKS, SITE_CONFIG } from '@/constants'
+
+export default function Navigation() {
+  const { theme, toggleTheme, mounted } = useTheme()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
+
+  return (
+    <>
+      <nav className={`navbar ${scrolled ? 'is-scrolled' : ''}`}>
+        <div className="container">
+          <div className="navbar__inner">
+            <Link href="/" className="navbar__left" data-cursor-default>
+              <div className="navbar__image">
+                <Image
+                  src="/assets/Me.jpg"
+                  alt={SITE_CONFIG.name}
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <div className="navbar__status" />
+              </div>
+              <span className="navbar__name">{SITE_CONFIG.name}</span>
+            </Link>
+
+            <div className="navbar__right">
+              <div className="navbar__links">
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`navbar__link ${isActive(link.href) ? 'is-active' : ''}`}
+                    data-cursor-default
+                  >
+                    {link.text}
+                  </Link>
+                ))}
+                {mounted && (
+                  <button onClick={toggleTheme} className="navbar__theme" data-cursor-default>
+                    {theme === 'light' ? 'Dark' : 'Light'}
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className={`navbar__menu-btn ${menuOpen ? 'is-open' : ''}`}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+                data-cursor-default
+              >
+                <span>Menu</span>
+                <span>{menuOpen ? '×' : '+'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div className={`menu-overlay ${menuOpen ? 'is-open' : ''}`}>
+        <div className="container">
+          <div className="menu-overlay__links">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`menu-overlay__link ${isActive(link.href) ? 'is-active' : ''}`}
+              >
+                {link.text}
+              </Link>
+            ))}
+          </div>
+
+          {mounted && (
+            <button
+              onClick={() => {
+                toggleTheme()
+                setMenuOpen(false)
+              }}
+              className="menu-overlay__theme"
+            >
+              Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}

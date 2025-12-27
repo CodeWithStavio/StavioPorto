@@ -1,0 +1,41 @@
+import type { Metadata } from 'next'
+import './globals.css'
+import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
+import CustomCursor from '@/components/CustomCursor'
+import Grid from '@/components/Grid'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import SmoothScroll from '@/components/effects/SmoothScroll'
+import LoadingScreen from '@/components/effects/LoadingScreen'
+import ScrollProgress from '@/components/effects/ScrollProgress'
+
+export const metadata: Metadata = {
+  title: 'App Developer - Mustafa Alhassny',
+  description: 'Mobile App Developer with expertise in React Native and backend architecture.',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>
+          <LoadingScreen />
+          <SmoothScroll>
+            <ScrollProgress />
+            <div className="ambient-glow" aria-hidden="true" />
+            <div className="noise" />
+            <Grid />
+            <CustomCursor />
+            <Navigation />
+            <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
