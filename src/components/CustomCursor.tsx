@@ -118,26 +118,35 @@ export default function CustomCursor() {
 
   // Dark theme = white cursor, Light theme = black cursor
   const cursorColor = isDark ? '#fafafa' : '#0a0a0a'
-  const textColor = isDark ? '#0a0a0a' : '#fafafa'
+  const textColor = isDark ? '#fafafa' : '#0a0a0a'
   const trailColor = isDark ? 'rgba(250, 250, 250, 0.3)' : 'rgba(10, 10, 10, 0.3)'
   const glowBorderColor = isDark ? 'rgba(250, 250, 250, 0.4)' : 'rgba(10, 10, 10, 0.4)'
+
+  // Hover colors - more transparent, theme-appropriate
+  const hoverBgColor = isDark ? 'rgba(250, 250, 250, 0.15)' : 'rgba(10, 10, 10, 0.08)'
+  const hoverBorderColor = isDark ? 'rgba(250, 250, 250, 0.5)' : 'rgba(10, 10, 10, 0.3)'
+
+  // Text cursor - transparent with border
+  const textBorderColor = isDark ? 'rgba(250, 250, 250, 0.6)' : 'rgba(10, 10, 10, 0.4)'
 
   const variants = {
     default: {
       width: 14,
       height: 14,
       backgroundColor: cursorColor,
+      border: 'none',
     },
     hover: {
       width: 50,
       height: 50,
-      backgroundColor: cursorColor,
-      opacity: 0.9,
+      backgroundColor: hoverBgColor,
+      border: `1px solid ${hoverBorderColor}`,
     },
     text: {
       width: 80,
       height: 80,
-      backgroundColor: cursorColor,
+      backgroundColor: 'transparent',
+      border: `1.5px solid ${textBorderColor}`,
     },
     hidden: {
       width: 0,
