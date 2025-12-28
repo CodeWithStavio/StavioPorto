@@ -99,6 +99,29 @@
 
 html {
   font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* GPU-accelerated smooth scrolling */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media (max-width: 1440px) {
@@ -123,11 +146,20 @@ html {
 @media (max-width: 480px) {
   html { font-size: 16px; }
   :root {
-    --title-xxl: 3rem;
-    --title-xl: 2.25rem;
-    --title-l: 1.5rem;
-    --title-m: 1.25rem;
-    --body: 1.0625rem;
+    --title-xxl: 2.5rem;
+    --title-xl: 2rem;
+    --title-l: 1.375rem;
+    --title-m: 1.125rem;
+    --body: 1rem;
+  }
+}
+
+@media (max-width: 375px) {
+  :root {
+    --title-xxl: 2.25rem;
+    --title-xl: 1.75rem;
+    --title-l: 1.25rem;
+    --title-m: 1rem;
   }
 }
 
@@ -171,6 +203,27 @@ body {
   }
 }
 
+/* Touch-friendly tap targets */
+@media (hover: none) and (pointer: coarse) {
+  a, button, [role="button"], input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Disable hover effects on touch */
+  .work-card:hover {
+    transform: none;
+  }
+
+  .work-card:hover .work-card__img {
+    transform: none;
+  }
+
+  .work-card:active {
+    transform: scale(0.98);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -201,6 +254,14 @@ button {
 @media (max-width: 480px) {
   .container {
     padding: 0 1rem;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: env(safe-area-inset-top)) {
+  .container {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
   }
 }
 
@@ -429,6 +490,8 @@ button {
   color: var(--background);
   font-size: var(--small);
   font-weight: 500;
+  border-radius: 0.5rem;
+  min-height: 44px;
   transition: all var(--duration) var(--ease);
 }
 
@@ -443,6 +506,17 @@ button {
 
 .navbar__menu-btn.is-open span:last-child {
   transform: rotate(45deg);
+}
+
+@media (max-width: 480px) {
+  .navbar__menu-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: var(--xs);
+  }
+
+  .navbar__menu-btn span:first-child {
+    display: none;
+  }
 }
 
 /* =============================================
@@ -491,6 +565,14 @@ button {
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.4s var(--ease);
+  min-height: 60px;
+}
+
+@media (max-width: 480px) {
+  .menu-overlay__link {
+    padding: 1.25rem 0;
+    font-size: var(--title-m);
+  }
 }
 
 .menu-overlay.is-open .menu-overlay__link {
@@ -580,19 +662,38 @@ button {
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
-    padding: 4rem 0 5rem;
+    padding: 7rem 0 5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 6rem 0 4rem;
   }
 }
 
 .hero__title {
   font-size: var(--title-xxl);
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0 0.2em;
+  gap: 0.1em 0.2em;
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    flex-direction: column;
+    gap: 0.25em;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__title {
+    line-height: 1.15;
+  }
 }
 
 /* Word rotation */
@@ -674,6 +775,12 @@ button {
 @media (max-width: 768px) {
   .hero__scroll {
     bottom: 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__scroll {
+    display: none;
   }
 }
 
@@ -910,6 +1017,7 @@ button {
 .work-card {
   background-color: var(--card);
   border: 1px solid var(--divider);
+  border-radius: 1.5rem;
   overflow: hidden;
   transition: all var(--duration) var(--ease);
 }
@@ -923,11 +1031,18 @@ button {
 .work-card__image {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 320px;
   overflow: hidden;
+  border-radius: 1.5rem 1.5rem 0 0;
 }
 
 @media (max-width: 768px) {
+  .work-card__image {
+    height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
   .work-card__image {
     height: 200px;
   }
@@ -939,11 +1054,12 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.6s var(--ease);
 }
 
 .work-card:hover .work-card__img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .work-card__number {
@@ -1031,8 +1147,14 @@ button {
 
 @media (max-width: 768px) {
   .page-hero {
-    min-height: 35vh;
-    padding: 5rem 0 2rem;
+    min-height: auto;
+    padding: 7rem 0 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero {
+    padding: 6rem 0 1.5rem;
   }
 }
 
@@ -1040,6 +1162,14 @@ button {
   font-size: var(--title-m);
   color: var(--text-secondary);
   margin-top: 1.5rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .page-hero__subtitle {
+    margin-top: 1rem;
+    font-size: var(--body);
+  }
 }
 
 /* =============================================
@@ -1062,6 +1192,13 @@ button {
   font-weight: 400;
   color: var(--foreground);
   margin-bottom: 2rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  .cta__title {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .magnetic-btn {
@@ -1074,7 +1211,18 @@ button {
   color: var(--background);
   background-color: var(--foreground);
   border: 1px solid var(--foreground);
+  border-radius: 0.5rem;
+  min-height: 48px;
   transition: all var(--duration) var(--ease);
+}
+
+@media (max-width: 480px) {
+  .magnetic-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: var(--small);
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .magnetic-btn:hover {
@@ -1163,6 +1311,14 @@ button {
   border-radius: 100px;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
+  min-height: 44px;
+}
+
+@media (max-width: 480px) {
+  .contact__social-link {
+    padding: 0.625rem 1rem;
+    font-size: var(--xs);
+  }
 }
 
 .contact__social-link:hover {
@@ -1739,4 +1895,81 @@ button {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* =============================================
+   PERFORMANCE OPTIMIZATIONS - CTO LEVEL
+   GPU Acceleration & Smooth Animations
+   ============================================= */
+
+/* Force GPU acceleration for smooth animations */
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize all interactive elements */
+a, button, [role="button"] {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Smooth image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Optimize card animations */
+.work-card,
+.expertise__item,
+.contact__social-link,
+.navbar__link {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Smoother page transitions */
+main {
+  transform: translateZ(0);
+}
+
+/* Optimize framer-motion elements */
+[style*="transform"] {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Smooth transitions for theme switching */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* High-performance scrolling */
+.container,
+main,
+section {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize text rendering during animations */
+.hero__title,
+.section-header__title,
+.page-hero__title {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Reduce paint operations */
+.navbar {
+  contain: layout style;
+}
+
+/* Layer promotion for frequently animated elements */
+.cursor,
+.loading-screen,
+.scroll-progress {
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }

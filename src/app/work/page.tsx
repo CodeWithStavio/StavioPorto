@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { PROJECTS, COPY } from '@/constants'
 import SectionHeader from '@/components/ui/SectionHeader'
@@ -78,20 +79,15 @@ export default function Work() {
                     data-cursor-text="View"
                   >
                     {project.image && (
-                      <img
+                      <Image
                         src={project.image}
                         alt={project.title}
+                        fill
                         className="work-card__img"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        style={['Zones', 'Bima', 'Wave'].includes(project.title) ? { objectFit: 'contain', padding: '2rem' } : undefined}
                       />
                     )}
-                    <motion.span
-                      className="work-card__number"
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 0.3 }}
-                      transition={{ duration: 0.8, delay: 0.2 }}
-                    >
-                      {project.id}
-                    </motion.span>
                   </div>
                   <div className="work-card__content">
                     <div className="work-card__header">
