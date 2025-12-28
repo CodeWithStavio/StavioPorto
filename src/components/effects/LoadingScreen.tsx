@@ -95,33 +95,37 @@ function ScrambleText({ text }: { text: string }) {
 }
 
 export default function LoadingScreen() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const wordRef = useRef<HTMLDivElement>(null)
   const [wordWidth, setWordWidth] = useState(0)
 
   useEffect(() => {
-    if (wordRef.current) {
-      setWordWidth(wordRef.current.offsetWidth)
+    // Check if already loaded this session - skip loading screen
+    const hasLoaded = sessionStorage.getItem('hasLoaded')
+    if (hasLoaded) {
+      return
     }
-  }, [currentIndex])
 
-  useEffect(() => {
-    const totalDuration = 5500 // 5.5 seconds total
+    // Show loading screen
+    setIsLoading(true)
+    sessionStorage.setItem('hasLoaded', 'true')
+
+    const totalDuration = 2500 // 2.5 seconds
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval)
           return 100
         }
-        return prev + 1
+        return prev + 2
       })
-    }, totalDuration / 100)
+    }, totalDuration / 50)
 
-    // Word cycling - 3 words
+    // Word cycling - 3 words (faster)
     const wordTimers = words.map((_, i) =>
-      setTimeout(() => setCurrentIndex(i), i * 1500 + 400)
+      setTimeout(() => setCurrentIndex(i), i * 700 + 200)
     )
 
     const exitTimer = setTimeout(() => setIsLoading(false), totalDuration)
@@ -132,6 +136,12 @@ export default function LoadingScreen() {
       clearTimeout(exitTimer)
     }
   }, [])
+
+  useEffect(() => {
+    if (wordRef.current) {
+      setWordWidth(wordRef.current.offsetWidth)
+    }
+  }, [currentIndex])
 
   const progressDisplay = useMemo(() =>
     progress.toString().padStart(3, '0'), [progress]
