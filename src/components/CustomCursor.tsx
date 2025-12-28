@@ -132,7 +132,7 @@ export default function CustomCursor() {
       style={{
         x: cursorXSpring,
         y: cursorYSpring,
-        scale: isPressed ? 0.8 : 1,
+        scale: isPressed && cursorVariant !== 'text' ? 0.9 : 1,
       }}
       variants={variants}
       animate={cursorVariant}
