@@ -501,6 +501,10 @@ button {
 
 .navbar__menu-btn span:last-child {
   font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform var(--duration) var(--ease);
 }
 
@@ -510,12 +514,18 @@ button {
 
 @media (max-width: 480px) {
   .navbar__menu-btn {
-    padding: 0.5rem 0.875rem;
+    padding: 0;
+    width: 44px;
+    justify-content: center;
     font-size: var(--xs);
   }
 
   .navbar__menu-btn span:first-child {
     display: none;
+  }
+
+  .navbar__menu-btn span:last-child {
+    font-size: 1.5rem;
   }
 }
 
@@ -742,6 +752,13 @@ button {
   }
 }
 
+@media (max-width: 480px) {
+  .hero__bio {
+    margin-top: 1rem;
+    line-height: 1.5;
+  }
+}
+
 .hero__bio strong {
   color: var(--foreground);
   font-weight: 500;
@@ -780,7 +797,19 @@ button {
 
 @media (max-width: 480px) {
   .hero__scroll {
-    display: none;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin: 2rem 0 3rem;
+  }
+
+  .hero__scroll-line {
+    height: 1.5rem;
+  }
+
+  .hero__scroll-text {
+    font-size: 0.6rem;
   }
 }
 
