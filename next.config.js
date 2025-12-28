@@ -126,18 +126,9 @@ const nextConfig = {
   // ════════════════════════════════════════════════════════════════════════════
   async redirects() {
     return [
-      // Redirect www to non-www (or vice versa)
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.stavio.dev',
-          },
-        ],
-        destination: 'https://stavio.dev/:path*',
-        permanent: true,
-      },
+      // Note: www/non-www redirects should be handled at DNS/hosting level (Vercel)
+      // to avoid redirect loops
+
       // Common typos/old URLs
       {
         source: '/portfolio',
