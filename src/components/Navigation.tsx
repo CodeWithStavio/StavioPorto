@@ -43,7 +43,7 @@ export default function Navigation() {
             <Link href="/" className="navbar__left" data-cursor-default>
               <div className="navbar__image">
                 <Image
-                  src="/assets/Me.jpg"
+                  src="/assets/Me.webp"
                   alt={SITE_CONFIG.name}
                   width={40}
                   height={40}

@@ -42,9 +42,13 @@ export default function RevealOnScroll({
         filter: 'blur(0px)',
       } : {}}
       transition={{
-        duration: 0.8,
+        duration: 0.7,
         delay,
         ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{
+        willChange: isInView ? 'auto' : 'transform, opacity, filter',
+        backfaceVisibility: 'hidden',
       }}
     >
       {children}
