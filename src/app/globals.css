@@ -271,28 +271,30 @@ button {
 
 .title-xxl {
   font-size: var(--title-xxl);
-  font-weight: 300;
+  font-weight: 200;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
 }
 
 .title-xl {
   font-size: var(--title-xl);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 .title-l {
   font-size: var(--title-l);
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .title-m {
   font-size: var(--title-m);
   font-weight: 400;
   line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 /* =============================================
@@ -343,16 +345,16 @@ button {
   right: 0;
   z-index: 100;
   padding: 1.25rem 0;
-  background: rgba(250, 250, 250, 0.4);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  background: rgba(250, 250, 250, 0.5);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   transition: all var(--duration) var(--ease);
 }
 
 .dark .navbar {
-  background: rgba(10, 10, 10, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  background: rgba(10, 10, 10, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .navbar.is-scrolled {
@@ -407,6 +409,16 @@ button {
   background-color: var(--accent-color);
   border-radius: 50%;
   border: 2px solid var(--background);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0);
+  }
 }
 
 .navbar__name {
@@ -443,12 +455,19 @@ button {
   color: var(--text-secondary);
   position: relative;
   padding: 0.5rem 0.75rem;
-  transition: color var(--duration) var(--ease);
+  transition: all var(--duration) var(--ease);
+  letter-spacing: 0.01em;
 }
 
 .navbar__link:hover,
 .navbar__link.is-active {
   color: var(--foreground);
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.dark .navbar__link:hover,
+.dark .navbar__link.is-active {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
 
 .navbar__link::after {
@@ -664,8 +683,8 @@ button {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 5rem 0 6rem;
+  justify-content: flex-start;
+  padding: 8rem 0 6rem;
   position: relative;
 }
 
@@ -684,9 +703,9 @@ button {
 
 .hero__title {
   font-size: var(--title-xxl);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-weight: 200;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -912,7 +931,7 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   font-size: var(--small);
 }
 
@@ -955,6 +974,27 @@ button {
   padding: 2rem 0;
   border-bottom: 1px solid var(--divider);
   transition: all var(--duration) var(--ease);
+  position: relative;
+}
+
+.expertise__item::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--text-tertiary), transparent);
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.expertise__item:hover::after {
+  opacity: 1;
+}
+
+.expertise__item:hover {
+  background: linear-gradient(90deg, transparent, rgba(128, 128, 128, 0.03), transparent);
 }
 
 @media (max-width: 768px) {
@@ -967,10 +1007,16 @@ button {
 
 .expertise__number {
   font-size: var(--title-xl);
-  font-weight: 300;
+  font-weight: 200;
   color: var(--text-tertiary);
   line-height: 1;
   min-width: 4rem;
+  letter-spacing: -0.03em;
+  transition: color var(--duration) var(--ease);
+}
+
+.expertise__item:hover .expertise__number {
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -1006,7 +1052,7 @@ button {
 }
 
 .expertise__item:hover .expertise__arrow {
-  transform: translateX(4px);
+  transform: translateX(6px) rotate(-15deg);
   color: var(--foreground);
 }
 
@@ -1048,13 +1094,16 @@ button {
   border: 1px solid var(--divider);
   border-radius: 1.5rem;
   overflow: hidden;
-  transition: all var(--duration) var(--ease);
+  transition: all 0.5s var(--ease), box-shadow 0.4s var(--ease);
+  box-shadow: 0 0 0 0 transparent;
 }
 
 .work-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--text-tertiary);
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  border-color: var(--text-secondary);
+  box-shadow:
+    0 25px 50px -20px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px var(--text-tertiary);
 }
 
 .work-card__image {
@@ -1084,11 +1133,12 @@ button {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.6s var(--ease);
+  transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
 }
 
 .work-card:hover .work-card__img {
-  transform: scale(1.08);
+  transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
 .work-card__number {
@@ -1098,9 +1148,15 @@ button {
   align-items: center;
   justify-content: center;
   font-size: var(--title-xxl);
-  font-weight: 200;
-  color: rgba(255, 255, 255, 0.3);
+  font-weight: 100;
+  color: rgba(255, 255, 255, 0.2);
   z-index: 1;
+  letter-spacing: -0.05em;
+  transition: opacity 0.4s var(--ease);
+}
+
+.work-card:hover .work-card__number {
+  opacity: 0.8;
 }
 
 .work-card__content {
@@ -1124,7 +1180,13 @@ button {
   font-size: var(--title-l);
   font-weight: 500;
   color: var(--foreground);
-  transition: color var(--duration) var(--ease);
+  transition: all var(--duration) var(--ease);
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--text-tertiary);
+}
+
+.work-card:hover .work-card__title {
+  border-left-color: var(--foreground);
 }
 
 .work-card__subtitle {
@@ -1154,12 +1216,14 @@ button {
   background-color: var(--muted);
   padding: 0.25rem 0.625rem;
   border-radius: 100px;
+  border: 1px solid transparent;
   transition: all var(--duration) var(--ease);
 }
 
 .work-card:hover .work-card__tag {
-  background-color: var(--foreground);
-  color: var(--background);
+  border-color: var(--text-tertiary);
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 /* =============================================
@@ -1231,23 +1295,28 @@ button {
 }
 
 .magnetic-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2rem;
+  padding: 1.125rem 2.25rem;
   font-size: var(--body);
   font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--background);
   background-color: var(--foreground);
   border: 1px solid var(--foreground);
-  border-radius: 0.5rem;
-  min-height: 48px;
-  transition: all var(--duration) var(--ease);
+  border-radius: 0.75rem;
+  min-height: 52px;
+  transition: all 0.4s var(--ease);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 480px) {
   .magnetic-btn {
-    padding: 0.875rem 1.5rem;
+    padding: 1rem 1.5rem;
     font-size: var(--small);
     width: 100%;
     justify-content: center;
@@ -1257,6 +1326,10 @@ button {
 .magnetic-btn:hover {
   background-color: transparent;
   color: var(--foreground);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px var(--foreground);
+  transform: translateY(-2px);
 }
 
 .magnetic-btn span {

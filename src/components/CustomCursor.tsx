@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
@@ -9,6 +9,8 @@ export default function CustomCursor() {
   const [cursorVariant, setCursorVariant] = useState<'default' | 'hover' | 'text' | 'hidden'>('default')
   const [cursorText, setCursorText] = useState('')
   const [isPressed, setIsPressed] = useState(false)
+  const lastInteractiveElement = useRef<Element | null>(null)
+  const resetTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
@@ -34,9 +36,49 @@ export default function CustomCursor() {
     const observer = new MutationObserver(checkTheme)
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
+    // Check if point is within element bounds with padding tolerance
+    const isWithinBounds = (x: number, y: number, element: Element) => {
+      const rect = element.getBoundingClientRect()
+      const cursorType = element.getAttribute('data-cursor')
+      // Smaller padding for text cursor elements since they span full width
+      const padding = cursorType === 'text' ? 20 : 30
+      return (
+        x >= rect.left - padding &&
+        x <= rect.right + padding &&
+        y >= rect.top - padding &&
+        y <= rect.bottom + padding
+      )
+    }
+
+    // Debounced reset to prevent flickering
+    const scheduleReset = () => {
+      if (resetTimeout.current) clearTimeout(resetTimeout.current)
+      resetTimeout.current = setTimeout(() => {
+        lastInteractiveElement.current = null
+        setCursorVariant('default')
+        setCursorText('')
+      }, 50)
+    }
+
+    const cancelReset = () => {
+      if (resetTimeout.current) {
+        clearTimeout(resetTimeout.current)
+        resetTimeout.current = null
+      }
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX)
       cursorY.set(e.clientY)
+
+      // Check if we're still within bounds of the last interactive element
+      if (lastInteractiveElement.current) {
+        if (!isWithinBounds(e.clientX, e.clientY, lastInteractiveElement.current)) {
+          scheduleReset()
+        } else {
+          cancelReset()
+        }
+      }
     }
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -47,19 +89,33 @@ export default function CustomCursor() {
 
       // Check if element wants default cursor (no hover effect)
       if (target.closest('[data-cursor-default]')) {
-        setCursorVariant('default')
-        setCursorText('')
+        if (!lastInteractiveElement.current) {
+          scheduleReset()
+        }
       } else if (cursorType === 'text' && text) {
+        cancelReset()
+        lastInteractiveElement.current = target.closest('[data-cursor]')
         setCursorVariant('text')
         setCursorText(text)
       } else if (target.closest('[data-cursor-hidden]')) {
+        cancelReset()
+        lastInteractiveElement.current = null
         setCursorVariant('hidden')
       } else if (target.closest('a, button, [data-cursor-hover]')) {
+        cancelReset()
+        lastInteractiveElement.current = target.closest('a, button, [data-cursor-hover]')
         setCursorVariant('hover')
         setCursorText('')
       } else {
-        setCursorVariant('default')
-        setCursorText('')
+        // Only schedule reset if we're not over an interactive element
+        if (!target.closest('[data-cursor]') && !target.closest('a, button, [data-cursor-hover]')) {
+          if (lastInteractiveElement.current) {
+            const withinBounds = isWithinBounds(e.clientX, e.clientY, lastInteractiveElement.current)
+            if (!withinBounds) {
+              scheduleReset()
+            }
+          }
+        }
       }
     }
 
@@ -69,6 +125,8 @@ export default function CustomCursor() {
     const handleMouseLeave = () => {
       cursorX.set(-100)
       cursorY.set(-100)
+      lastInteractiveElement.current = null
+      cancelReset()
     }
 
     document.addEventListener('mousemove', handleMouseMove, { passive: true })
@@ -79,6 +137,7 @@ export default function CustomCursor() {
 
     return () => {
       observer.disconnect()
+      cancelReset()
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseleave', handleMouseLeave)

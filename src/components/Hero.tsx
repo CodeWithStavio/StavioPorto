@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ROTATING_WORDS, SITE_CONFIG } from '@/constants'
 import Marquee from './effects/Marquee'
+import SectionHeader from './ui/SectionHeader'
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -57,6 +58,14 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={mounted ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <SectionHeader label="[A]" title="Introduction" />
+        </motion.div>
+
         <motion.h1
           className="hero__title"
           variants={titleVariants}
