@@ -166,13 +166,11 @@ export default function Contact({ variant = 'home' }: ContactProps) {
                 {/* Resume Download */}
                 <motion.a
                   href="/resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="contact__resume"
                   initial={{ opacity: 0, y: 10 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.5 }}
-                  download
+                  download="MustafaAlhassny.pdf"
                   aria-label="Download resume as PDF"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
