@@ -112,7 +112,7 @@ export default function LoadingScreen() {
     setIsLoading(true)
     sessionStorage.setItem('hasLoaded', 'true')
 
-    const totalDuration = 2500 // 2.5 seconds
+    const totalDuration = 5000 // 5 seconds
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -123,9 +123,9 @@ export default function LoadingScreen() {
       })
     }, totalDuration / 50)
 
-    // Word cycling - 3 words (faster)
+    // Word cycling - 3 words over 5 seconds
     const wordTimers = words.map((_, i) =>
-      setTimeout(() => setCurrentIndex(i), i * 700 + 200)
+      setTimeout(() => setCurrentIndex(i), i * 1500 + 200)
     )
 
     const exitTimer = setTimeout(() => setIsLoading(false), totalDuration)
