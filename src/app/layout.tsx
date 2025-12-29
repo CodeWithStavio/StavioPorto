@@ -51,11 +51,11 @@ export default function RootLayout({
           <SmoothScroll>
             <ScrollProgress />
             <div className="ambient-glow" aria-hidden="true" />
-            <div className="noise" />
+            <div className="noise" aria-hidden="true" />
             <Grid />
             <CustomCursor />
             <Navigation />
-            <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
+            <main id="main-content" tabIndex={-1} style={{ position: 'relative', zIndex: 1, outline: 'none' }} role="main">{children}</main>
             <Footer />
           </SmoothScroll>
         </ThemeProvider>

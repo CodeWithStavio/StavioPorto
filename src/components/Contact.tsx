@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SOCIAL_LINKS, SITE_CONFIG, COPY } from '@/constants'
 import SectionHeader from './ui/SectionHeader'
@@ -8,6 +8,97 @@ import AnimatedLink from './ui/AnimatedLink'
 
 interface ContactProps {
   variant?: 'home' | 'page'
+}
+
+// Contact Form Component
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    // Create mailto link with form data
+    const subject = encodeURIComponent(`Portfolio Contact: ${formData.name}`)
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)
+    window.location.href = `mailto:${SITE_CONFIG.email}?subject=${subject}&body=${body}`
+
+    setIsSubmitting(false)
+    setSubmitted(true)
+    setTimeout(() => setSubmitted(false), 3000)
+  }
+
+  return (
+    <form className="contact__form" onSubmit={handleSubmit}>
+      <div className="contact__form-group">
+        <label htmlFor="name" className="contact__form-label">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          className="contact__form-input"
+          placeholder="Your name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          aria-required="true"
+        />
+      </div>
+
+      <div className="contact__form-group">
+        <label htmlFor="email" className="contact__form-label">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          className="contact__form-input"
+          placeholder="your@email.com"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          aria-required="true"
+        />
+      </div>
+
+      <div className="contact__form-group">
+        <label htmlFor="message" className="contact__form-label">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          className="contact__form-textarea"
+          placeholder="Tell me about your project..."
+          value={formData.message}
+          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          aria-required="true"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="contact__form-submit"
+        disabled={isSubmitting}
+        aria-label="Send message"
+      >
+        {submitted ? 'Opening Email Client...' : isSubmitting ? 'Sending...' : 'Send Message'}
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </button>
+    </form>
+  )
 }
 
 export default function Contact({ variant = 'home' }: ContactProps) {
@@ -44,7 +135,7 @@ export default function Contact({ variant = 'home' }: ContactProps) {
   if (variant === 'page') {
     return (
       <>
-        {/* Get in Touch Section */}
+        {/* Get in Touch Section with Form */}
         <motion.section
           className="contact"
           ref={ref}
@@ -72,8 +163,28 @@ export default function Contact({ variant = 'home' }: ContactProps) {
                     </AnimatedLink>
                   </motion.div>
                 )}
+                {/* Resume Download */}
+                <motion.a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact__resume"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  download
+                  aria-label="Download resume as PDF"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg>
+                  Download Resume
+                </motion.a>
               </motion.div>
-              <div />
+
+              <motion.div variants={itemVariants}>
+                <ContactForm />
+              </motion.div>
             </div>
           </div>
         </motion.section>

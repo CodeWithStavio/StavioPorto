@@ -37,10 +37,10 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className={`navbar ${scrolled ? 'is-scrolled' : ''}`}>
+      <nav className={`navbar ${scrolled ? 'is-scrolled' : ''}`} aria-label="Main navigation">
         <div className="container">
           <div className="navbar__inner">
-            <Link href="/" className="navbar__left" data-cursor-default>
+            <Link href="/" className="navbar__left" data-cursor-default aria-label="Go to homepage">
               <div className="navbar__image">
                 <Image
                   src="/assets/Me.webp"
@@ -55,19 +55,26 @@ export default function Navigation() {
             </Link>
 
             <div className="navbar__right">
-              <div className="navbar__links">
+              <div className="navbar__links" role="menubar">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     className={`navbar__link ${isActive(link.href) ? 'is-active' : ''}`}
                     data-cursor-default
+                    role="menuitem"
+                    aria-current={isActive(link.href) ? 'page' : undefined}
                   >
                     {link.text}
                   </Link>
                 ))}
                 {mounted && (
-                  <button onClick={toggleTheme} className="navbar__theme" data-cursor-default>
+                  <button
+                    onClick={toggleTheme}
+                    className="navbar__theme"
+                    data-cursor-default
+                    aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                  >
                     {theme === 'light' ? 'Dark' : 'Light'}
                   </button>
                 )}
@@ -88,20 +95,28 @@ export default function Navigation() {
         </div>
       </nav>
 
-      <div className={`menu-overlay ${menuOpen ? 'is-open' : ''}`}>
+      <div
+        className={`menu-overlay ${menuOpen ? 'is-open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+        aria-hidden={!menuOpen}
+      >
         <div className="container">
-          <div className="menu-overlay__links">
+          <nav className="menu-overlay__links" aria-label="Mobile navigation">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
                 className={`menu-overlay__link ${isActive(link.href) ? 'is-active' : ''}`}
+                aria-current={isActive(link.href) ? 'page' : undefined}
+                tabIndex={menuOpen ? 0 : -1}
               >
                 {link.text}
               </Link>
             ))}
-          </div>
+          </nav>
 
           {mounted && (
             <button
@@ -110,6 +125,8 @@ export default function Navigation() {
                 setMenuOpen(false)
               }}
               className="menu-overlay__theme"
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              tabIndex={menuOpen ? 0 : -1}
             >
               Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
             </button>

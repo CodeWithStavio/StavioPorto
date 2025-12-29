@@ -110,7 +110,6 @@ export default function LoadingScreen() {
 
     // Show loading screen
     setIsLoading(true)
-    sessionStorage.setItem('hasLoaded', 'true')
 
     const totalDuration = 5000 // 5 seconds
     const progressInterval = setInterval(() => {
@@ -128,7 +127,11 @@ export default function LoadingScreen() {
       setTimeout(() => setCurrentIndex(i), i * 1500 + 200)
     )
 
-    const exitTimer = setTimeout(() => setIsLoading(false), totalDuration)
+    const exitTimer = setTimeout(() => {
+      setIsLoading(false)
+      // Only mark as loaded AFTER the loading completes
+      sessionStorage.setItem('hasLoaded', 'true')
+    }, totalDuration)
 
     return () => {
       clearInterval(progressInterval)

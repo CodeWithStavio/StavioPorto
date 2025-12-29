@@ -196,6 +196,7 @@ export default function CustomCursor() {
       variants={variants}
       animate={cursorVariant}
       transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+      aria-hidden="true"
     >
       {cursorVariant === 'text' && (
         <motion.span

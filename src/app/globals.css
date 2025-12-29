@@ -1447,6 +1447,142 @@ button {
   transform: translateX(0);
 }
 
+/* Contact Form */
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 500px;
+}
+
+.contact__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact__form-label {
+  font-size: var(--small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.contact__form-input,
+.contact__form-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: var(--body);
+  font-family: inherit;
+  color: var(--foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  transition: all var(--duration) var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.contact__form-input::placeholder,
+.contact__form-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.contact__form-input:hover,
+.contact__form-textarea:hover {
+  border-color: var(--text-tertiary);
+}
+
+.contact__form-input:focus,
+.contact__form-textarea:focus {
+  outline: none;
+  border-color: var(--foreground);
+  box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.05);
+}
+
+.dark .contact__form-input:focus,
+.dark .contact__form-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(250, 250, 250, 0.05);
+}
+
+.contact__form-textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.contact__form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: var(--body);
+  font-weight: 500;
+  color: var(--background);
+  background: var(--foreground);
+  border: 1px solid var(--foreground);
+  border-radius: 0.75rem;
+  transition: all var(--duration) var(--ease);
+  min-height: 52px;
+  width: fit-content;
+}
+
+.contact__form-submit:hover {
+  background: transparent;
+  color: var(--foreground);
+}
+
+.contact__form-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact__form-submit svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--duration) var(--ease);
+}
+
+.contact__form-submit:hover svg {
+  transform: translateX(4px);
+}
+
+/* Resume download link */
+.contact__resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  font-size: var(--small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: all var(--duration) var(--ease);
+}
+
+.contact__resume:hover {
+  color: var(--foreground);
+  border-color: var(--foreground);
+  background: var(--hover-bg);
+}
+
+.contact__resume svg {
+  width: 16px;
+  height: 16px;
+}
+
+.contact__subtitle {
+  font-size: var(--small);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
 /* =============================================
    FOOTER
    ============================================= */
@@ -1552,6 +1688,58 @@ button {
 .page-hero,
 .work-section {
   animation: fadeIn 0.6s var(--ease) forwards;
+}
+
+/* =============================================
+   ACCESSIBILITY - Focus States
+   ============================================= */
+
+/* Visible focus states for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Ensure focus is visible even with custom cursor */
+@media (hover: hover) {
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 3px;
+  }
+}
+
+/* Special focus for navigation links */
+.navbar__link:focus-visible {
+  outline-offset: 6px;
+}
+
+/* Focus for work cards */
+.work-card:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 4px;
+}
+
+/* Focus for social links */
+.contact__social-link:focus-visible {
+  outline-offset: 2px;
+  background-color: var(--hover-bg);
+}
+
+/* Focus for form inputs */
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 0;
+  border-color: var(--foreground);
 }
 
 /* =============================================
