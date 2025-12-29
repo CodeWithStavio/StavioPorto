@@ -49,6 +49,7 @@ export default function RevealOnScroll({
       style={{
         willChange: isInView ? 'auto' : 'transform, opacity, filter',
         backfaceVisibility: 'hidden',
+        height: '100%',
       }}
     >
       {children}

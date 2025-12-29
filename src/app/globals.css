@@ -1080,6 +1080,7 @@ button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  align-items: stretch;
 }
 
 @media (max-width: 768px) {
@@ -1096,6 +1097,9 @@ button {
   overflow: hidden;
   transition: all 0.5s var(--ease), box-shadow 0.4s var(--ease);
   box-shadow: 0 0 0 0 transparent;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .work-card:hover {
@@ -1161,6 +1165,9 @@ button {
 
 .work-card__content {
   padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -1202,12 +1209,18 @@ button {
   color: var(--text-secondary);
   line-height: 1.5;
   margin-bottom: 1rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .work-card__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-top: auto;
 }
 
 .work-card__tag {

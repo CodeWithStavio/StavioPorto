@@ -48,6 +48,7 @@ export default function ParallaxCard({ children, className = '' }: ParallaxCardP
         rotateY,
         transformStyle: 'preserve-3d',
         transformPerspective: 1000,
+        height: '100%',
       }}
     >
       {children}
