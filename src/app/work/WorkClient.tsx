@@ -71,47 +71,49 @@ export default function WorkClient() {
           <div className="work-grid">
             {PROJECTS.map((project, index) => (
               <RevealOnScroll key={project.id} delay={index * 0.15}>
-                <ParallaxCard className="work-card">
-                  <div
-                    className="work-card__image"
-                    style={{ backgroundColor: project.color }}
-                    data-cursor="text"
-                    data-cursor-text="View"
-                  >
-                    {project.image && (
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="work-card__img"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        style={['Zones', 'Bima', 'Wave'].includes(project.title) ? { objectFit: 'contain', padding: '2rem' } : undefined}
-                      />
-                    )}
-                  </div>
-                  <div className="work-card__content">
-                    <div className="work-card__header">
-                      <h3 className="work-card__title">{project.title}</h3>
-                      {project.subtitle && (
-                        <span className="work-card__subtitle">{project.subtitle}</span>
+                <Link href={`/work/${project.slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                  <ParallaxCard className="work-card">
+                    <div
+                      className="work-card__image"
+                      style={{ backgroundColor: project.color }}
+                      data-cursor="text"
+                      data-cursor-text="View"
+                    >
+                      {project.image && (
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="work-card__img"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          style={['Zones', 'Bima', 'Wave'].includes(project.title) ? { objectFit: 'contain', padding: '2rem' } : undefined}
+                        />
                       )}
                     </div>
-                    <p className="work-card__description">{project.description}</p>
-                    <div className="work-card__tags">
-                      {project.tags.map((tag, i) => (
-                        <motion.span
-                          key={i}
-                          className="work-card__tag"
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                        >
-                          {tag}
-                        </motion.span>
-                      ))}
+                    <div className="work-card__content">
+                      <div className="work-card__header">
+                        <h3 className="work-card__title">{project.title}</h3>
+                        {project.subtitle && (
+                          <span className="work-card__subtitle">{project.subtitle}</span>
+                        )}
+                      </div>
+                      <p className="work-card__description">{project.description}</p>
+                      <div className="work-card__tags">
+                        {project.tags.map((tag, i) => (
+                          <motion.span
+                            key={i}
+                            className="work-card__tag"
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                          >
+                            {tag}
+                          </motion.span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </ParallaxCard>
+                  </ParallaxCard>
+                </Link>
               </RevealOnScroll>
             ))}
           </div>
