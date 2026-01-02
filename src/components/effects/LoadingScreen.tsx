@@ -95,7 +95,7 @@ function ScrambleText({ text }: { text: string }) {
 }
 
 export default function LoadingScreen() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const wordRef = useRef<HTMLDivElement>(null)
@@ -105,11 +105,9 @@ export default function LoadingScreen() {
     // Check if already loaded this session - skip loading screen
     const hasLoaded = sessionStorage.getItem('hasLoaded')
     if (hasLoaded) {
+      setIsLoading(false)
       return
     }
-
-    // Show loading screen
-    setIsLoading(true)
 
     const totalDuration = 5000 // 5 seconds
     const progressInterval = setInterval(() => {
