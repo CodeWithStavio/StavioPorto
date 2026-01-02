@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useTheme } from './ThemeProvider'
 import { NAV_LINKS, SITE_CONFIG } from '@/constants'
@@ -40,6 +41,16 @@ export default function Navigation() {
         <div className="container">
           <div className="navbar__inner">
             <Link href="/" className="navbar__left" data-cursor-default aria-label="Go to homepage">
+              <div className="navbar__image">
+                <Image
+                  src="/assets/Me.webp"
+                  alt={SITE_CONFIG.name}
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <div className="navbar__status" />
+              </div>
               <span className="navbar__name">{SITE_CONFIG.name}</span>
             </Link>
 
