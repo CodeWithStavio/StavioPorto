@@ -11,7 +11,6 @@ function ScrambleText({ text }: { text: string }) {
   const [settled, setSettled] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // Initialize on mount to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
     setDisplayText(text.split('').map(() => chars[Math.floor(Math.random() * chars.length)]))
@@ -53,7 +52,6 @@ function ScrambleText({ text }: { text: string }) {
     return () => intervals.forEach(clearInterval)
   }, [text, mounted])
 
-  // Show actual text on server, scramble on client
   if (!mounted) {
     return (
       <span style={{ display: 'inline-flex' }}>
@@ -69,17 +67,15 @@ function ScrambleText({ text }: { text: string }) {
       {displayText.map((char, i) => (
         <motion.span
           key={i}
-          initial={{ y: 80, opacity: 0, filter: 'blur(8px)' }}
+          initial={{ y: 40, opacity: 0 }}
           animate={{
             y: 0,
             opacity: 1,
-            filter: 'blur(0px)',
             color: settled ? 'var(--foreground)' : 'var(--text-secondary)'
           }}
           transition={{
-            y: { duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] },
-            opacity: { duration: 0.5, delay: i * 0.06 },
-            filter: { duration: 0.5, delay: i * 0.06 },
+            y: { duration: 0.4, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] },
+            opacity: { duration: 0.3, delay: i * 0.04 },
             color: { duration: 0.3 }
           }}
           style={{
@@ -94,7 +90,11 @@ function ScrambleText({ text }: { text: string }) {
   )
 }
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  children: React.ReactNode
+}
+
+export default function LoadingScreen({ children }: LoadingScreenProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [progress, setProgress] = useState(0)
@@ -120,14 +120,12 @@ export default function LoadingScreen() {
       })
     }, totalDuration / 50)
 
-    // Word cycling - 3 words over 5 seconds
     const wordTimers = words.map((_, i) =>
       setTimeout(() => setCurrentIndex(i), i * 1500 + 200)
     )
 
     const exitTimer = setTimeout(() => {
       setIsLoading(false)
-      // Only mark as loaded AFTER the loading completes
       sessionStorage.setItem('hasLoaded', 'true')
     }, totalDuration)
 
@@ -148,355 +146,328 @@ export default function LoadingScreen() {
     progress.toString().padStart(3, '0'), [progress]
   )
 
-  return (
-    <AnimatePresence>
-      {isLoading && (
+  // Show loading screen OR content - never both
+  if (isLoading) {
+    return (
+      <div
+        className="loading-screen"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'var(--background)',
+          zIndex: 10000,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Animated gradient orbs */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          <motion.div
+            animate={{
+              x: [0, 100, -50, 0],
+              y: [0, -80, 50, 0],
+              scale: [1, 1.2, 0.9, 1],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              top: '20%',
+              left: '20%',
+              width: 'min(600px, 60vw)',
+              height: 'min(600px, 60vw)',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, var(--text-tertiary) 0%, transparent 70%)',
+              opacity: 0.08,
+            }}
+          />
+          <motion.div
+            animate={{
+              x: [0, -80, 60, 0],
+              y: [0, 60, -40, 0],
+              scale: [1, 0.9, 1.1, 1],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              bottom: '10%',
+              right: '15%',
+              width: 'min(500px, 50vw)',
+              height: 'min(500px, 50vw)',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, var(--text-tertiary) 0%, transparent 70%)',
+              opacity: 0.06,
+            }}
+          />
+        </div>
+
+        {/* Grid pattern overlay */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(var(--text-tertiary) 1px, transparent 1px),
+            linear-gradient(90deg, var(--text-tertiary) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+          opacity: 0.03,
+          maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%)',
+        }} />
+
+        {/* Noise texture */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: 0.015,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          pointerEvents: 'none',
+        }} />
+
+        {/* Top left corner */}
         <motion.div
-          className="loading-screen"
-          initial={{ opacity: 1 }}
-          exit={{
-            opacity: 0,
-            scale: 1.02,
-            filter: 'blur(10px)',
-            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
-          }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'var(--background)',
-            zIndex: 10000,
+            position: 'absolute',
+            top: 'clamp(24px, 5vw, 48px)',
+            left: 'clamp(24px, 5vw, 48px)',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
+            gap: '6px',
           }}
         >
-          {/* Animated gradient orbs */}
-          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-            <motion.div
-              animate={{
-                x: [0, 100, -50, 0],
-                y: [0, -80, 50, 0],
-                scale: [1, 1.2, 0.9, 1],
-              }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                top: '20%',
-                left: '20%',
-                width: 'min(600px, 60vw)',
-                height: 'min(600px, 60vw)',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, var(--text-tertiary) 0%, transparent 70%)',
-                opacity: 0.08,
-                filter: 'blur(60px)',
-              }}
-            />
-            <motion.div
-              animate={{
-                x: [0, -80, 60, 0],
-                y: [0, 60, -40, 0],
-                scale: [1, 0.9, 1.1, 1],
-              }}
-              transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                bottom: '10%',
-                right: '15%',
-                width: 'min(500px, 50vw)',
-                height: 'min(500px, 50vw)',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, var(--text-tertiary) 0%, transparent 70%)',
-                opacity: 0.06,
-                filter: 'blur(80px)',
-              }}
-            />
-            <motion.div
-              animate={{
-                x: [0, 50, -30, 0],
-                y: [0, 30, -50, 0],
-              }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                right: '30%',
-                width: 'min(300px, 30vw)',
-                height: 'min(300px, 30vw)',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, var(--text-tertiary) 0%, transparent 70%)',
-                opacity: 0.05,
-                filter: 'blur(40px)',
-              }}
-            />
-          </div>
+          <span style={{
+            fontSize: '11px',
+            letterSpacing: '0.25em',
+            color: 'var(--text-secondary)',
+            fontFamily: 'var(--font-geist-mono), monospace',
+          }}>
+            STAVIO.DEV
+          </span>
+          <span style={{
+            fontSize: '10px',
+            letterSpacing: '0.15em',
+            color: 'var(--text-tertiary)',
+            fontFamily: 'var(--font-geist-mono), monospace',
+          }}>
+            PORTFOLIO 2025
+          </span>
+        </motion.div>
 
-          {/* Grid pattern overlay */}
-          <div style={{
+        {/* Top right - progress */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          style={{
             position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              linear-gradient(var(--text-tertiary) 1px, transparent 1px),
-              linear-gradient(90deg, var(--text-tertiary) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-            opacity: 0.03,
-            maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 100%)',
-          }} />
-
-          {/* Noise texture */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.015,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            pointerEvents: 'none',
-          }} />
-
-          {/* Top left corner */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            top: 'clamp(24px, 5vw, 48px)',
+            right: 'clamp(24px, 5vw, 48px)',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '4px',
+          }}
+        >
+          <span
             style={{
-              position: 'absolute',
-              top: 'clamp(24px, 5vw, 48px)',
-              left: 'clamp(24px, 5vw, 48px)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px',
+              fontSize: 'clamp(40px, 8vw, 80px)',
+              fontWeight: 200,
+              letterSpacing: '-0.02em',
+              color: 'var(--foreground)',
+              fontFamily: 'var(--font-geist-mono), monospace',
+              lineHeight: 1,
             }}
           >
-            <span style={{
-              fontSize: '11px',
-              letterSpacing: '0.25em',
-              color: 'var(--text-secondary)',
-              fontFamily: 'var(--font-geist-mono), monospace',
-            }}>
-              STAVIO.DEV
-            </span>
-            <span style={{
-              fontSize: '10px',
-              letterSpacing: '0.15em',
-              color: 'var(--text-tertiary)',
-              fontFamily: 'var(--font-geist-mono), monospace',
-            }}>
-              PORTFOLIO 2025
-            </span>
-          </motion.div>
+            {progressDisplay}
+          </span>
+          <span style={{
+            fontSize: '14px',
+            color: 'var(--text-tertiary)',
+            fontFamily: 'var(--font-geist-mono), monospace',
+          }}>
+            %
+          </span>
+        </motion.div>
 
-          {/* Top right - progress */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{
-              position: 'absolute',
-              top: 'clamp(24px, 5vw, 48px)',
-              right: 'clamp(24px, 5vw, 48px)',
-              display: 'flex',
-              alignItems: 'baseline',
-              gap: '4px',
-            }}
-          >
-            <motion.span
-              key={progress}
+        {/* Center - Main word display */}
+        <div style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              ref={wordRef}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{
+                opacity: 0,
+                y: -30,
+                transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+              }}
               style={{
-                fontSize: 'clamp(40px, 8vw, 80px)',
+                fontSize: 'clamp(60px, 18vw, 200px)',
                 fontWeight: 200,
-                letterSpacing: '-0.02em',
-                color: 'var(--foreground)',
-                fontFamily: 'var(--font-geist-mono), monospace',
+                letterSpacing: '-0.04em',
                 lineHeight: 1,
               }}
             >
-              {progressDisplay}
-            </motion.span>
-            <span style={{
-              fontSize: '14px',
-              color: 'var(--text-tertiary)',
-              fontFamily: 'var(--font-geist-mono), monospace',
-            }}>
-              %
-            </span>
-          </motion.div>
+              <ScrambleText text={words[currentIndex]} />
+            </motion.div>
+          </AnimatePresence>
 
-          {/* Center - Main word display */}
-          <div style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                ref={wordRef}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{
-                  opacity: 0,
-                  y: -40,
-                  filter: 'blur(12px)',
-                  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-                }}
-                style={{
-                  fontSize: 'clamp(60px, 18vw, 200px)',
-                  fontWeight: 200,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1,
-                }}
-              >
-                <ScrambleText text={words[currentIndex]} />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Dynamic underline - matches full word width */}
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{
-                scaleX: 1,
-                opacity: 1,
-                width: wordWidth > 0 ? wordWidth : 'clamp(80px, 15vw, 200px)',
-              }}
-              transition={{
-                scaleX: { duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] },
-                width: { duration: 0.15, ease: 'easeOut' },
-              }}
-              style={{
-                height: '2px',
-                background: 'var(--foreground)',
-                marginTop: 'clamp(16px, 3vw, 32px)',
-                transformOrigin: 'center',
-              }}
-            />
-          </div>
-
-          {/* Bottom left - status */}
+          {/* Dynamic underline */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            style={{
-              position: 'absolute',
-              bottom: 'clamp(24px, 5vw, 48px)',
-              left: 'clamp(24px, 5vw, 48px)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{
+              scaleX: 1,
+              opacity: 1,
+              width: wordWidth > 0 ? wordWidth : 'clamp(80px, 15vw, 200px)',
             }}
-          >
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 1, 0.5]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--foreground)',
-              }}
-            />
-            <span style={{
-              fontSize: '11px',
-              letterSpacing: '0.2em',
-              color: 'var(--text-secondary)',
-              fontFamily: 'var(--font-geist-mono), monospace',
-              textTransform: 'uppercase',
-            }}>
-              Loading Experience
-            </span>
-          </motion.div>
-
-          {/* Bottom right - word indicators */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            style={{
-              position: 'absolute',
-              bottom: 'clamp(24px, 5vw, 48px)',
-              right: 'clamp(24px, 5vw, 48px)',
-              display: 'flex',
-              gap: '10px',
+            transition={{
+              scaleX: { duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] },
+              width: { duration: 0.15, ease: 'easeOut' },
             }}
-          >
-            {words.map((word, i) => (
-              <motion.div
-                key={word}
-                animate={{
-                  width: currentIndex === i ? '32px' : '12px',
-                  backgroundColor: currentIndex >= i ? 'var(--foreground)' : 'var(--text-tertiary)',
-                  opacity: currentIndex >= i ? 1 : 0.3,
-                }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  height: '3px',
-                  borderRadius: '2px',
-                }}
-              />
-            ))}
-          </motion.div>
-
-          {/* Progress bar at bottom */}
-          <motion.div
             style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
               height: '2px',
-              backgroundColor: 'var(--border)',
+              background: 'var(--foreground)',
+              marginTop: 'clamp(16px, 3vw, 32px)',
+              transformOrigin: 'center',
             }}
-          >
+          />
+        </div>
+
+        {/* Bottom left - status */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(24px, 5vw, 48px)',
+            left: 'clamp(24px, 5vw, 48px)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+          }}
+        >
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--foreground)',
+            }}
+          />
+          <span style={{
+            fontSize: '11px',
+            letterSpacing: '0.2em',
+            color: 'var(--text-secondary)',
+            fontFamily: 'var(--font-geist-mono), monospace',
+            textTransform: 'uppercase',
+          }}>
+            Loading Experience
+          </span>
+        </motion.div>
+
+        {/* Bottom right - word indicators */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(24px, 5vw, 48px)',
+            right: 'clamp(24px, 5vw, 48px)',
+            display: 'flex',
+            gap: '10px',
+          }}
+        >
+          {words.map((word, i) => (
             <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: progress / 100 }}
-              transition={{ duration: 0.1 }}
+              key={word}
+              animate={{
+                width: currentIndex === i ? '32px' : '12px',
+                backgroundColor: currentIndex >= i ? 'var(--foreground)' : 'var(--text-tertiary)',
+                opacity: currentIndex >= i ? 1 : 0.3,
+              }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                height: '100%',
-                backgroundColor: 'var(--foreground)',
-                transformOrigin: 'left',
+                height: '3px',
+                borderRadius: '2px',
               }}
             />
-          </motion.div>
-
-          {/* Corner brackets */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 0.15, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            style={{
-              position: 'absolute',
-              top: '15%',
-              left: '8%',
-              width: '40px',
-              height: '40px',
-              borderTop: '1px solid var(--foreground)',
-              borderLeft: '1px solid var(--foreground)',
-            }}
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 0.15, scale: 1 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            style={{
-              position: 'absolute',
-              bottom: '15%',
-              right: '8%',
-              width: '40px',
-              height: '40px',
-              borderBottom: '1px solid var(--foreground)',
-              borderRight: '1px solid var(--foreground)',
-            }}
-          />
+          ))}
         </motion.div>
-      )}
-    </AnimatePresence>
-  )
+
+        {/* Progress bar at bottom */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            backgroundColor: 'var(--border)',
+          }}
+        >
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: progress / 100 }}
+            transition={{ duration: 0.1 }}
+            style={{
+              height: '100%',
+              backgroundColor: 'var(--foreground)',
+              transformOrigin: 'left',
+            }}
+          />
+        </div>
+
+        {/* Corner brackets */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 0.15, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          style={{
+            position: 'absolute',
+            top: '15%',
+            left: '8%',
+            width: '40px',
+            height: '40px',
+            borderTop: '1px solid var(--foreground)',
+            borderLeft: '1px solid var(--foreground)',
+          }}
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 0.15, scale: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          style={{
+            position: 'absolute',
+            bottom: '15%',
+            right: '8%',
+            width: '40px',
+            height: '40px',
+            borderBottom: '1px solid var(--foreground)',
+            borderRight: '1px solid var(--foreground)',
+          }}
+        />
+      </div>
+    )
+  }
+
+  // Loading complete - render children
+  return <>{children}</>
 }

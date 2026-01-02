@@ -33,22 +33,18 @@ export default function RevealOnScroll({
       initial={{
         opacity: 0,
         ...directionOffset[direction],
-        filter: 'blur(10px)',
       }}
       animate={isInView ? {
         opacity: 1,
         x: 0,
         y: 0,
-        filter: 'blur(0px)',
       } : {}}
       transition={{
-        duration: 0.7,
+        duration: 0.5,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
       style={{
-        willChange: isInView ? 'auto' : 'transform, opacity, filter',
-        backfaceVisibility: 'hidden',
         height: '100%',
       }}
     >

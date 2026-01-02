@@ -1,8 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
 import Link from 'next/link'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import SectionHeader from '@/components/ui/SectionHeader'
 
 interface Capability {
@@ -33,13 +32,6 @@ interface ExpertiseClientProps {
 }
 
 export default function ExpertiseClient({ expertise, nextExpertise, prevExpertise }: ExpertiseClientProps) {
-  const heroRef = useRef(null)
-  const heroInView = useInView(heroRef, { once: true })
-  const capabilitiesRef = useRef(null)
-  const capabilitiesInView = useInView(capabilitiesRef, { once: true, margin: '-100px' })
-  const metricsRef = useRef(null)
-  const metricsInView = useInView(metricsRef, { once: true, margin: '-100px' })
-
   const { scrollYProgress } = useScroll()
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
@@ -48,12 +40,12 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
   return (
     <>
       {/* Hero Section */}
-      <section className="page-hero" ref={heroRef} style={{ minHeight: '70vh', display: 'flex', alignItems: 'center' }}>
+      <section className="page-hero" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center' }}>
         <div className="container">
           {/* Back Link */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            animate={heroInView ? { opacity: 1, x: 0 } : {}}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             style={{ marginBottom: '2rem' }}
           >
@@ -78,7 +70,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
           {/* Service ID */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={heroInView ? { opacity: 1, scale: 1 } : {}}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             style={{
               display: 'inline-block',
@@ -106,14 +98,14 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             {titleChars.map((char, i) => (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, y: 80, rotateX: -90 }}
-                animate={heroInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.6,
-                  delay: 0.2 + i * 0.03,
+                  duration: 0.5,
+                  delay: 0.2 + i * 0.02,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                style={{ display: 'inline-block', transformOrigin: 'bottom' }}
+                style={{ display: 'inline-block' }}
               >
                 {char === ' ' ? '\u00A0' : char}
               </motion.span>
@@ -122,9 +114,9 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
 
           {/* Long Description */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             style={{
               fontSize: 'var(--title-s)',
               color: 'var(--text-secondary)',
@@ -158,12 +150,13 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
       </section>
 
       {/* Metrics Section */}
-      <section className="expertise-metrics" ref={metricsRef} style={{ padding: '4rem 0' }}>
+      <section className="expertise-metrics" style={{ padding: '4rem 0' }}>
         <div className="container">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={metricsInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -175,11 +168,8 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             }}
           >
             {expertise.metrics.map((metric, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={metricsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
                 style={{
                   textAlign: 'center',
                   padding: '1rem',
@@ -203,19 +193,20 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
                 }}>
                   {metric.label}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </motion.div>
         </div>
       </section>
 
       {/* Capabilities Section */}
-      <section className="expertise-capabilities" ref={capabilitiesRef} style={{ padding: '4rem 0 6rem' }}>
+      <section className="expertise-capabilities" style={{ padding: '4rem 0 6rem' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={capabilitiesInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
           >
             <SectionHeader label="[A]" title="Capabilities" />
           </motion.div>
@@ -229,19 +220,20 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             {expertise.capabilities.map((cap, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={capabilitiesInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                viewport={{ once: true }}
                 style={{
                   padding: '1.5rem',
                   background: 'var(--card)',
                   borderRadius: '1rem',
                   border: '1px solid var(--border)',
-                  transition: 'all 0.3s ease',
                 }}
                 whileHover={{
                   y: -4,
                   borderColor: 'var(--text-tertiary)',
+                  transition: { duration: 0.2 }
                 }}
               >
                 <div style={{

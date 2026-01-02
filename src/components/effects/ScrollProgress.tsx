@@ -11,17 +11,9 @@ export default function ScrollProgress() {
   })
 
   return (
-    <>
-      {/* Main progress bar */}
-      <motion.div
-        className="scroll-progress"
-        style={{ scaleX }}
-      />
-      {/* Glow effect */}
-      <motion.div
-        className="scroll-progress-glow"
-        style={{ scaleX }}
-      />
-    </>
+    <motion.div
+      className="scroll-progress"
+      style={{ scaleX }}
+    />
   )
 }

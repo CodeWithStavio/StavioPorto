@@ -30,6 +30,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Theme flash prevention - must run before body renders */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -47,17 +66,18 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <LoadingScreen />
-          <SmoothScroll>
-            <ScrollProgress />
-            <div className="ambient-glow" aria-hidden="true" />
-            <div className="noise" aria-hidden="true" />
-            <Grid />
-            <CustomCursor />
-            <Navigation />
-            <main id="main-content" tabIndex={-1} style={{ position: 'relative', zIndex: 1, outline: 'none' }} role="main">{children}</main>
-            <Footer />
-          </SmoothScroll>
+          <LoadingScreen>
+            <SmoothScroll>
+              <ScrollProgress />
+              <div className="ambient-glow" aria-hidden="true" />
+              <div className="noise" aria-hidden="true" />
+              <Grid />
+              <CustomCursor />
+              <Navigation />
+              <main id="main-content" tabIndex={-1} style={{ position: 'relative', zIndex: 1, outline: 'none' }} role="main">{children}</main>
+              <Footer />
+            </SmoothScroll>
+          </LoadingScreen>
         </ThemeProvider>
       </body>
     </html>

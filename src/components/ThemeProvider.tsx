@@ -17,19 +17,20 @@ const ThemeContext = createContext<ThemeContextType>({
 })
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark')
+  // Theme is already set by inline script in layout.tsx, so we sync state with DOM
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+    }
+    return 'dark'
+  })
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // Sync state with what the inline script already set
+    const isDark = document.documentElement.classList.contains('dark')
+    setTheme(isDark ? 'dark' : 'light')
     setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    if (savedTheme) {
-      setTheme(savedTheme)
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark')
-    } else {
-      // Default to dark theme
-      document.documentElement.classList.add('dark')
-    }
   }, [])
 
   const toggleTheme = () => {

@@ -8,10 +8,8 @@ import SectionHeader from './ui/SectionHeader'
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     const interval = setInterval(() => {
       setWordIndex((prev) => (prev + 1) % (ROTATING_WORDS.length - 1))
     }, 2500)
@@ -44,12 +42,11 @@ export default function Hero() {
   }
 
   const bioVariants = {
-    hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] as const },
+      transition: { duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] as const },
     },
   }
 
@@ -60,7 +57,7 @@ export default function Hero() {
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={mounted ? { opacity: 1, y: 0 } : {}}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <SectionHeader label="[A]" title="Introduction" />
@@ -70,7 +67,7 @@ export default function Hero() {
           className="hero__title"
           variants={titleVariants}
           initial="hidden"
-          animate={mounted ? 'visible' : 'hidden'}
+          animate="visible"
           style={{ perspective: '1000px' }}
         >
           <span className="hero__title-line">
@@ -90,10 +87,10 @@ export default function Hero() {
               <motion.span
                 key={wordIndex}
                 className="hero__word"
-                initial={{ opacity: 0, y: 60, rotateX: -45, filter: 'blur(8px)' }}
-                animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -60, rotateX: 45, filter: 'blur(8px)' }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 {ROTATING_WORDS[wordIndex]}
               </motion.span>
@@ -105,7 +102,7 @@ export default function Hero() {
           className="hero__bio"
           variants={bioVariants}
           initial="hidden"
-          animate={mounted ? 'visible' : 'hidden'}
+          animate="visible"
         >
           <p>
             I&apos;m <strong>{SITE_CONFIG.name}</strong>, an AI specialist and full-stack developer

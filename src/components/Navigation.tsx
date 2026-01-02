@@ -57,16 +57,15 @@ export default function Navigation() {
                     {link.text}
                   </Link>
                 ))}
-                {mounted && (
-                  <button
-                    onClick={toggleTheme}
-                    className="navbar__theme"
-                    data-cursor-default
-                    aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-                  >
-                    {theme === 'light' ? 'Dark' : 'Light'}
-                  </button>
-                )}
+                <button
+                  onClick={toggleTheme}
+                  className="navbar__theme"
+                  data-cursor-default
+                  aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                  style={{ visibility: mounted ? 'visible' : 'hidden' }}
+                >
+                  {theme === 'light' ? 'Dark' : 'Light'}
+                </button>
               </div>
 
               <button
@@ -107,19 +106,18 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {mounted && (
-            <button
-              onClick={() => {
-                toggleTheme()
-                setMenuOpen(false)
-              }}
-              className="menu-overlay__theme"
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-              tabIndex={menuOpen ? 0 : -1}
-            >
-              Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-            </button>
-          )}
+          <button
+            onClick={() => {
+              toggleTheme()
+              setMenuOpen(false)
+            }}
+            className="menu-overlay__theme"
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            tabIndex={menuOpen ? 0 : -1}
+            style={{ visibility: mounted ? 'visible' : 'hidden' }}
+          >
+            Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+          </button>
         </div>
       </div>
     </>
