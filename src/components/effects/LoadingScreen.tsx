@@ -254,7 +254,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
             color: 'var(--text-tertiary)',
             fontFamily: 'var(--font-geist-mono), monospace',
           }}>
-            PORTFOLIO 2025
+            PORTFOLIO 2026
           </span>
         </motion.div>
 
