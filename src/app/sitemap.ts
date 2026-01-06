@@ -1,17 +1,17 @@
 // ══════════════════════════════════════════════════════════════════════════════
 // DYNAMIC SITEMAP GENERATION
-// Next.js 14+ built-in sitemap support
+// Next.js 14+ built-in sitemap support - CTO-Level SEO
 // ══════════════════════════════════════════════════════════════════════════════
 
 import { MetadataRoute } from 'next'
-import { PROJECTS } from '@/constants'
+import { PROJECTS, EXPERTISE_ITEMS } from '@/constants'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stavio.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date().toISOString()
 
-  // Core pages
+  // Core pages - highest priority
   const corePages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -33,13 +33,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  // Project pages (if you add individual project routes later)
+  // Individual project pages - high priority
   const projectPages: MetadataRoute.Sitemap = PROJECTS.map((project) => ({
-    url: `${BASE_URL}/work#${project.title.toLowerCase().replace(/\s+/g, '-')}`,
+    url: `${BASE_URL}/work/${project.slug}`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }))
 
-  return [...corePages, ...projectPages]
+  // Expertise/service pages - high priority for lead generation
+  const expertisePages: MetadataRoute.Sitemap = EXPERTISE_ITEMS.map((item) => ({
+    url: `${BASE_URL}/expertise/${item.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }))
+
+  return [...corePages, ...expertisePages, ...projectPages]
 }

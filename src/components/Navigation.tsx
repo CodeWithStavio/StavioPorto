@@ -10,7 +10,18 @@ export default function Navigation() {
   const { theme, toggleTheme, mounted } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [isThemeChanging, setIsThemeChanging] = useState(false)
   const pathname = usePathname()
+
+  // Debounced theme toggle to prevent accidental double-clicks
+  const handleThemeToggle = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (isThemeChanging) return
+    setIsThemeChanging(true)
+    toggleTheme()
+    setTimeout(() => setIsThemeChanging(false), 300)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,18 +69,24 @@ export default function Navigation() {
                   </Link>
                 ))}
                 <button
-                  onClick={toggleTheme}
+                  type="button"
+                  onClick={handleThemeToggle}
                   className="navbar__theme"
                   data-cursor-default
                   aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                   style={{ visibility: mounted ? 'visible' : 'hidden' }}
+                  disabled={isThemeChanging}
                 >
                   {theme === 'light' ? 'Dark' : 'Light'}
                 </button>
               </div>
 
               <button
-                onClick={() => setMenuOpen(!menuOpen)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setMenuOpen(!menuOpen)
+                }}
                 className={`navbar__menu-btn ${menuOpen ? 'is-open' : ''}`}
                 aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={menuOpen}
@@ -107,14 +124,16 @@ export default function Navigation() {
           </nav>
 
           <button
-            onClick={() => {
-              toggleTheme()
+            type="button"
+            onClick={(e) => {
+              handleThemeToggle(e)
               setMenuOpen(false)
             }}
             className="menu-overlay__theme"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             tabIndex={menuOpen ? 0 : -1}
             style={{ visibility: mounted ? 'visible' : 'hidden' }}
+            disabled={isThemeChanging}
           >
             Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
           </button>

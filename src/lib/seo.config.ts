@@ -28,23 +28,39 @@ export const SEO_CONFIG = {
     instagram: 'https://www.instagram.com/mustafa_alhasan_',
   },
   keywords: [
+    // Primary Skills
     'AI Developer',
     'Full-Stack Developer',
     'React Native Developer',
     'Machine Learning Engineer',
     'PyTorch Developer',
-    'TensorFlow',
+    'TensorFlow Expert',
     'Next.js Developer',
     'Mobile App Developer',
+    // Technical Specializations
     'Deepfake Detection',
     'NLP Engineer',
+    'Computer Vision Developer',
     'Cross-Platform Development',
-    'Node.js',
-    'TypeScript',
+    'Node.js Developer',
+    'TypeScript Expert',
+    'Python Developer',
+    'FastAPI Developer',
+    // Services
+    'AI Consulting',
+    'App Development Services',
+    'Software Engineer',
+    'Backend Developer',
+    'Frontend Developer',
+    'API Development',
+    'Cloud Architecture',
+    // Brand & Location
     'Mustafa Alhassny',
     'Stavio',
     'Freelance Developer',
-    'AI Consultant',
+    'Remote Developer',
+    'Hire AI Developer',
+    'Hire Mobile Developer',
   ],
 } as const
 
@@ -148,10 +164,9 @@ export const baseMetadata: Metadata = {
   },
   manifest: '/site.webmanifest',
 
-  // Verification (Add your actual codes)
+  // Verification
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || '',
-    // yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
   },
 
   // Alternates

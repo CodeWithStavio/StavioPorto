@@ -109,7 +109,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
       return
     }
 
-    const totalDuration = 5000 // 5 seconds
+    const totalDuration = 6500 // 6.5 seconds for better readability
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -121,7 +121,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
     }, totalDuration / 50)
 
     const wordTimers = words.map((_, i) =>
-      setTimeout(() => setCurrentIndex(i), i * 1500 + 200)
+      setTimeout(() => setCurrentIndex(i), i * 2000 + 200)
     )
 
     const exitTimer = setTimeout(() => {

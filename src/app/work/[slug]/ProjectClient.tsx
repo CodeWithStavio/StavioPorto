@@ -33,6 +33,40 @@ interface ProjectClientProps {
   prevProject: Project
 }
 
+// Clip reveal for main titles only
+function ClipTitle({
+  children,
+  isInView,
+  delay = 0,
+}: {
+  children: string
+  isInView: boolean
+  delay?: number
+}) {
+  const chars = children.split('')
+
+  return (
+    <span className="clip-reveal">
+      {chars.map((char, i) => (
+        <span key={i} className="clip-reveal__wrapper">
+          <motion.span
+            className="clip-reveal__item"
+            initial={{ y: '100%' }}
+            animate={isInView ? { y: '0%' } : { y: '100%' }}
+            transition={{
+              duration: 0.5,
+              delay: delay + i * 0.025,
+              ease: [0.65, 0, 0.35, 1],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export default function ProjectClient({ project, nextProject, prevProject }: ProjectClientProps) {
   const heroRef = useRef(null)
   const heroInView = useInView(heroRef, { once: true })
@@ -40,12 +74,12 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
   const detailsInView = useInView(detailsRef, { once: true, margin: '-100px' })
   const highlightsRef = useRef(null)
   const highlightsInView = useInView(highlightsRef, { once: true, margin: '-100px' })
+  const ctaRef = useRef(null)
+  const ctaInView = useInView(ctaRef, { once: true, margin: '-100px' })
 
   const { scrollYProgress } = useScroll()
   const imageScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.1])
   const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.6])
-
-  const titleChars = project.title.split('')
 
   return (
     <>
@@ -54,8 +88,8 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
         <div className="container">
           {/* Back Link */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={heroInView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
             style={{ marginBottom: '2rem', paddingTop: '2rem' }}
           >
@@ -71,16 +105,15 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
               }}
               data-cursor-default
             >
-              <span style={{ fontSize: '1.25rem' }}>←</span>
-              All Projects
+              ← All Projects
             </Link>
           </motion.div>
 
           {/* Project Number */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={heroInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -111,33 +144,16 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
             </span>
           </motion.div>
 
-          {/* Title */}
-          <motion.h1
-            className="title-xxl"
-            style={{ perspective: '1000px', marginBottom: '1.5rem' }}
-          >
-            {titleChars.map((char, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 80, rotateX: -90 }}
-                animate={heroInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.2 + i * 0.04,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                style={{ display: 'inline-block', transformOrigin: 'bottom' }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </motion.span>
-            ))}
-          </motion.h1>
+          {/* Title - CLIP REVEAL */}
+          <h1 className="title-xxl" style={{ marginBottom: '1.5rem' }}>
+            <ClipTitle isInView={heroInView} delay={0.15}>{project.title}</ClipTitle>
+          </h1>
 
           {/* Long Description */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
             style={{
               fontSize: 'var(--title-s)',
               color: 'var(--text-secondary)',
@@ -151,9 +167,9 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
 
           {/* Tags */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.5 }}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -223,21 +239,22 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
       {/* Project Details Grid */}
       <section ref={detailsRef} style={{ padding: '4rem 0' }}>
         <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '2rem',
-            padding: '3rem',
-            background: 'var(--card)',
-            borderRadius: '1.5rem',
-            border: '1px solid var(--border)',
-          }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={detailsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '2rem',
+              padding: '3rem',
+              background: 'var(--card)',
+              borderRadius: '1.5rem',
+              border: '1px solid var(--border)',
+            }}
+          >
             {/* Role */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={detailsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+            <div>
               <div style={{
                 fontSize: 'var(--xs)',
                 color: 'var(--text-tertiary)',
@@ -254,14 +271,10 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
               }}>
                 {project.role}
               </div>
-            </motion.div>
+            </div>
 
             {/* Duration */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={detailsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <div>
               <div style={{
                 fontSize: 'var(--xs)',
                 color: 'var(--text-tertiary)',
@@ -278,16 +291,11 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
               }}>
                 {project.duration}
               </div>
-            </motion.div>
+            </div>
 
             {/* Metrics */}
             {project.metrics.map((metric, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={detailsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-              >
+              <div key={i}>
                 <div style={{
                   fontSize: 'var(--xs)',
                   color: 'var(--text-tertiary)',
@@ -305,22 +313,16 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                 }}>
                   {metric.value}
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Highlights Section */}
       <section ref={highlightsRef} style={{ padding: '4rem 0 6rem' }}>
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={highlightsInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            <SectionHeader label="[A]" title="Key Highlights" />
-          </motion.div>
+          <SectionHeader label="[A]" title="Key Highlights" />
 
           <div style={{
             display: 'grid',
@@ -330,8 +332,8 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
             {project.highlights.map((highlight, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -30 }}
-                animate={highlightsInView ? { opacity: 1, x: 0 } : {}}
+                initial={{ opacity: 0, y: 10 }}
+                animate={highlightsInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
                 style={{
                   display: 'flex',
@@ -341,7 +343,6 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                   background: 'var(--card)',
                   borderRadius: '1rem',
                   border: '1px solid var(--border)',
-                  transition: 'all 0.3s ease',
                 }}
               >
                 <span style={{
@@ -395,7 +396,6 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                   background: 'var(--card)',
                   borderRadius: '1rem',
                   border: '1px solid var(--border)',
-                  transition: 'border-color 0.3s ease',
                 }}
               >
                 <span style={{
@@ -435,7 +435,6 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                   borderRadius: '1rem',
                   border: '1px solid var(--border)',
                   textAlign: 'right',
-                  transition: 'border-color 0.3s ease',
                 }}
               >
                 <span style={{
@@ -464,27 +463,20 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="cta" style={{ padding: '6rem 0' }}>
+      {/* CTA - CLIP REVEAL ON TITLE */}
+      <section className="cta" ref={ctaRef} style={{ padding: '6rem 0' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            style={{
-              fontSize: 'var(--title-xl)',
-              fontWeight: 400,
-              marginBottom: '2rem',
-            }}
-          >
-            Have a similar project in mind?
-          </motion.h2>
+          <h2 style={{
+            fontSize: 'var(--title-xl)',
+            fontWeight: 400,
+            marginBottom: '2rem',
+          }}>
+            <ClipTitle isInView={ctaInView} delay={0}>Have a similar project in mind?</ClipTitle>
+          </h2>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Link
               href="/contact"
@@ -500,11 +492,9 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                 borderRadius: '0.75rem',
                 fontSize: 'var(--body)',
                 fontWeight: 500,
-                transition: 'all 0.3s ease',
               }}
             >
-              Let&apos;s Talk
-              <span>→</span>
+              Let&apos;s Talk →
             </Link>
           </motion.div>
         </div>

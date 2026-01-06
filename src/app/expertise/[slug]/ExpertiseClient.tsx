@@ -1,7 +1,8 @@
 'use client'
 
+import { useRef } from 'react'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import SectionHeader from '@/components/ui/SectionHeader'
 
 interface Capability {
@@ -31,21 +32,68 @@ interface ExpertiseClientProps {
   prevExpertise: ExpertiseItem
 }
 
+// Clip reveal for main titles only
+function ClipTitle({
+  children,
+  isInView,
+  delay = 0,
+}: {
+  children: string
+  isInView: boolean
+  delay?: number
+}) {
+  const chars = children.split('')
+
+  return (
+    <span className="clip-reveal">
+      {chars.map((char, i) => (
+        <span key={i} className="clip-reveal__wrapper">
+          <motion.span
+            className="clip-reveal__item"
+            initial={{ y: '100%' }}
+            animate={isInView ? { y: '0%' } : { y: '100%' }}
+            transition={{
+              duration: 0.5,
+              delay: delay + i * 0.025,
+              ease: [0.65, 0, 0.35, 1],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export default function ExpertiseClient({ expertise, nextExpertise, prevExpertise }: ExpertiseClientProps) {
   const { scrollYProgress } = useScroll()
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
-  const titleChars = expertise.title.split('')
+  const heroRef = useRef(null)
+  const heroInView = useInView(heroRef, { once: true })
+
+  const metricsRef = useRef(null)
+  const metricsInView = useInView(metricsRef, { once: true, margin: '-50px' })
+
+  const capabilitiesRef = useRef(null)
+  const capabilitiesInView = useInView(capabilitiesRef, { once: true, margin: '-50px' })
+
+  const toolsRef = useRef(null)
+  const toolsInView = useInView(toolsRef, { once: true, margin: '-50px' })
+
+  const ctaRef = useRef(null)
+  const ctaInView = useInView(ctaRef, { once: true, margin: '-100px' })
 
   return (
     <>
       {/* Hero Section */}
-      <section className="page-hero" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center' }}>
+      <section className="page-hero" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center' }} ref={heroRef}>
         <div className="container">
           {/* Back Link */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
             style={{ marginBottom: '2rem' }}
           >
@@ -62,15 +110,14 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
               }}
               data-cursor-default
             >
-              <span style={{ fontSize: '1.25rem' }}>←</span>
-              Back to Home
+              ← Back to Home
             </Link>
           </motion.div>
 
           {/* Service ID */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
             style={{
               display: 'inline-block',
@@ -90,33 +137,16 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             </span>
           </motion.div>
 
-          {/* Title */}
-          <motion.h1
-            className="title-xxl"
-            style={{ perspective: '1000px', marginBottom: '1.5rem' }}
-          >
-            {titleChars.map((char, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.2 + i * 0.02,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                style={{ display: 'inline-block' }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </motion.span>
-            ))}
-          </motion.h1>
+          {/* Title - CLIP REVEAL */}
+          <h1 className="title-xxl" style={{ marginBottom: '1.5rem' }}>
+            <ClipTitle isInView={heroInView} delay={0.15}>{expertise.title}</ClipTitle>
+          </h1>
 
           {/* Long Description */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
             style={{
               fontSize: 'var(--title-s)',
               color: 'var(--text-secondary)',
@@ -150,13 +180,12 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
       </section>
 
       {/* Metrics Section */}
-      <section className="expertise-metrics" style={{ padding: '4rem 0' }}>
+      <section className="expertise-metrics" style={{ padding: '4rem 0' }} ref={metricsRef}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+            animate={metricsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -200,16 +229,9 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
       </section>
 
       {/* Capabilities Section */}
-      <section className="expertise-capabilities" style={{ padding: '4rem 0 6rem' }}>
+      <section className="expertise-capabilities" style={{ padding: '4rem 0 6rem' }} ref={capabilitiesRef}>
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <SectionHeader label="[A]" title="Capabilities" />
-          </motion.div>
+          <SectionHeader label="[A]" title="Capabilities" />
 
           <div style={{
             display: 'grid',
@@ -220,10 +242,9 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             {expertise.capabilities.map((cap, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={capabilitiesInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
                 style={{
                   padding: '1.5rem',
                   background: 'var(--card)',
@@ -274,15 +295,14 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
       </section>
 
       {/* Tools Section */}
-      <section className="expertise-tools" style={{ padding: '4rem 0', background: 'var(--muted)' }}>
+      <section className="expertise-tools" style={{ padding: '4rem 0', background: 'var(--muted)' }} ref={toolsRef}>
         <div className="container">
           <SectionHeader label="[B]" title="Tech Stack" />
 
           <motion.div
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            animate={toolsInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -293,10 +313,9 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             {expertise.tools.map((tool, i) => (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: i * 0.05 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0 }}
+                animate={toolsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.3, delay: i * 0.03 }}
                 style={{
                   padding: '0.75rem 1.25rem',
                   background: 'var(--background)',
@@ -405,27 +424,20 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="cta" style={{ padding: '6rem 0' }}>
+      {/* CTA - CLIP REVEAL ON TITLE */}
+      <section className="cta" style={{ padding: '6rem 0' }} ref={ctaRef}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            style={{
-              fontSize: 'var(--title-xl)',
-              fontWeight: 400,
-              marginBottom: '2rem',
-            }}
-          >
-            Let&apos;s build something amazing
-          </motion.h2>
+          <h2 style={{
+            fontSize: 'var(--title-xl)',
+            fontWeight: 400,
+            marginBottom: '2rem',
+          }}>
+            <ClipTitle isInView={ctaInView} delay={0}>Ready to build something amazing?</ClipTitle>
+          </h2>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Link
               href="/contact"
@@ -444,8 +456,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
                 transition: 'all 0.3s ease',
               }}
             >
-              Start a Project
-              <span>→</span>
+              Start a Project →
             </Link>
           </motion.div>
         </div>

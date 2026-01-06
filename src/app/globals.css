@@ -2256,3 +2256,119 @@ section {
   will-change: transform, opacity;
   transform: translateZ(0);
 }
+
+/* =============================================
+   PREMIUM TEXT ANIMATIONS
+   CTO-Level Elegant Reveal Effects
+   ============================================= */
+
+/* Split Text Reveal - Hero Section */
+.split-text-reveal {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.split-text-reveal__char-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.split-text-reveal__char {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Rotating Word - Hero Section */
+.rotating-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  perspective: 1000px;
+}
+
+.rotating-word__text {
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+/* Text Line Reveal - CTA Section */
+.text-line-reveal {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.text-line-reveal__word-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.text-line-reveal__word {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Text Reveal Component */
+.text-reveal {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.text-reveal__item-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.text-reveal__item {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Split Flap Text - Loading Screen */
+.split-flap-text {
+  display: inline-flex;
+}
+
+.split-flap-text__char-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.split-flap-text__char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* GPU acceleration for premium animations */
+.split-text-reveal,
+.rotating-word,
+.text-line-reveal,
+.text-reveal,
+.split-flap-text,
+.clip-reveal {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* =============================================
+   CLIP REVEAL ANIMATION - Apple-style
+   ============================================= */
+
+.clip-reveal {
+  display: inline;
+}
+
+.clip-reveal__wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.clip-reveal__item {
+  display: inline-block;
+  will-change: transform;
+}

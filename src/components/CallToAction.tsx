@@ -2,69 +2,34 @@
 
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { COPY } from '@/constants'
 import MagneticButton from './effects/MagneticButton'
 
-const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-function ScrambleTitle({ text, isInView }: { text: string; isInView: boolean }) {
-  const [displayText, setDisplayText] = useState<string[]>(text.split(''))
-  const [hasAnimated, setHasAnimated] = useState(false)
-
-  useEffect(() => {
-    if (!isInView || hasAnimated) return
-    setHasAnimated(true)
-
-    const intervals: NodeJS.Timeout[] = []
-
-    text.split('').forEach((char, i) => {
-      if (char === ' ' || char === '?' || char === '!') return
-
-      let iterations = 0
-      const maxIterations = 4 + Math.floor(i / 3)
-
-      const interval = setInterval(() => {
-        setDisplayText(prev => {
-          const newText = [...prev]
-          if (iterations >= maxIterations) {
-            newText[i] = char
-          } else {
-            newText[i] = chars[Math.floor(Math.random() * chars.length)]
-          }
-          return newText
-        })
-
-        iterations++
-        if (iterations > maxIterations) {
-          clearInterval(interval)
-        }
-      }, 35)
-
-      intervals.push(interval)
-    })
-
-    return () => intervals.forEach(clearInterval)
-  }, [isInView, text, hasAnimated])
+// Premium line-by-line text reveal
+function TextLineReveal({ text, isInView }: { text: string; isInView: boolean }) {
+  const words = text.split(' ')
 
   return (
-    <>
-      {displayText.map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{
-            duration: 0.4,
-            delay: i * 0.015,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          style={{ display: 'inline-block' }}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
+    <span className="text-line-reveal">
+      {words.map((word, i) => (
+        <span key={i} className="text-line-reveal__word-wrapper">
+          <motion.span
+            className="text-line-reveal__word"
+            initial={{ y: '100%' }}
+            animate={isInView ? { y: '0%' } : { y: '100%' }}
+            transition={{
+              duration: 0.6,
+              delay: i * 0.05,
+              ease: [0.65, 0, 0.35, 1],
+            }}
+          >
+            {word}
+          </motion.span>
+          {i < words.length - 1 && '\u00A0'}
+        </span>
       ))}
-    </>
+    </span>
   )
 }
 
@@ -75,16 +40,14 @@ export default function CallToAction() {
   return (
     <section className="cta" ref={ref}>
       <div className="container">
-        <motion.h2
-          className="cta__title"
-        >
-          <ScrambleTitle text={COPY.cta.title} isInView={isInView} />
+        <motion.h2 className="cta__title">
+          <TextLineReveal text={COPY.cta.title} isInView={isInView} />
         </motion.h2>
 
         <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.9 }}
-          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] as const }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4, ease: [0.65, 0, 0.35, 1] }}
         >
           <MagneticButton>
             <Link

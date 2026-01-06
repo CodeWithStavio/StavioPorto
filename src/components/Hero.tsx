@@ -1,108 +1,102 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ROTATING_WORDS, SITE_CONFIG } from '@/constants'
 import Marquee from './effects/Marquee'
 import SectionHeader from './ui/SectionHeader'
 
-export default function Hero() {
-  const [wordIndex, setWordIndex] = useState(0)
+// Premium split text animation with mask reveal
+function SplitTextReveal({ text, delay = 0 }: { text: string; delay?: number }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const isInView = useInView(ref, { once: true })
+
+  return (
+    <span ref={ref} className="split-text-reveal">
+      {text.split('').map((char, i) => (
+        <span key={i} className="split-text-reveal__char-wrapper">
+          <motion.span
+            className="split-text-reveal__char"
+            initial={{ y: '100%' }}
+            animate={isInView ? { y: '0%' } : { y: '100%' }}
+            transition={{
+              duration: 0.6,
+              delay: delay + i * 0.03,
+              ease: [0.65, 0, 0.35, 1],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+// Elegant rotating word with smooth morph
+function RotatingWord({ words, interval = 2500 }: { words: string[]; interval?: number }) {
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % (ROTATING_WORDS.length - 1))
-    }, 2500)
-    return () => clearInterval(interval)
-  }, [])
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length)
+    }, interval)
+    return () => clearInterval(timer)
+  }, [words.length, interval])
 
-  const titleVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  }
+  return (
+    <span className="rotating-word">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          className="rotating-word__text"
+          initial={{ y: '100%', rotateX: -80 }}
+          animate={{ y: '0%', rotateX: 0 }}
+          exit={{ y: '-100%', rotateX: 80, opacity: 0 }}
+          transition={{
+            duration: 0.7,
+            ease: [0.65, 0, 0.35, 1],
+          }}
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
-  const letterVariants = {
-    hidden: { opacity: 0, y: 100, rotateX: -90 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        type: 'spring' as const,
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-  }
-
-  const bioVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] as const },
-    },
-  }
+export default function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(containerRef, { once: true })
 
   const titleText = 'Elevate your'
 
   return (
-    <section className="hero">
+    <section className="hero" ref={containerRef}>
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
         >
           <SectionHeader label="[A]" title="Introduction" />
         </motion.div>
 
-        <motion.h1
-          className="hero__title"
-          variants={titleVariants}
-          initial="hidden"
-          animate="visible"
-          style={{ perspective: '1000px' }}
-        >
+        <h1 className="hero__title">
           <span className="hero__title-line">
-            {titleText.split('').map((char, i) => (
-              <motion.span
-                key={i}
-                variants={letterVariants}
-                style={{ display: 'inline-block', transformOrigin: 'bottom' }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </motion.span>
-            ))}
+            <SplitTextReveal text={titleText} delay={0.2} />
           </span>
 
           <span className="hero__words">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={wordIndex}
-                className="hero__word"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {ROTATING_WORDS[wordIndex]}
-              </motion.span>
-            </AnimatePresence>
+            <RotatingWord words={ROTATING_WORDS.slice(0, -1)} interval={2500} />
           </span>
-        </motion.h1>
+        </h1>
 
         <motion.div
           className="hero__bio"
-          variants={bioVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.8, ease: [0.65, 0, 0.35, 1] }}
         >
           <p>
             I&apos;m <strong>{SITE_CONFIG.name}</strong>, an AI specialist and full-stack developer
@@ -122,7 +116,7 @@ export default function Hero() {
             className="hero__scroll-line"
             initial={{ scaleY: 0 }}
             animate={{ scaleY: 1 }}
-            transition={{ delay: 1.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 1.8, duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
           />
           <motion.span
             className="hero__scroll-text"
@@ -135,7 +129,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Marquee at bottom */}
       <div className="hero__marquee">
         <Marquee speed={30}>
           <span className="hero__marquee-item">AI & Machine Learning</span>
