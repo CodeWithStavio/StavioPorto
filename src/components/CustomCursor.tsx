@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
@@ -11,6 +11,9 @@ export default function CustomCursor() {
   const [isPressed, setIsPressed] = useState(false)
   const lastInteractiveElement = useRef<Element | null>(null)
   const resetTimeout = useRef<NodeJS.Timeout | null>(null)
+  const rafId = useRef<number | null>(null)
+  const pendingMousePos = useRef<{ x: number; y: number } | null>(null)
+  const cachedRect = useRef<{ element: Element; rect: DOMRect; time: number } | null>(null)
 
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
@@ -19,6 +22,19 @@ export default function CustomCursor() {
 
   const cursorXSpring = useSpring(cursorX, springConfig)
   const cursorYSpring = useSpring(cursorY, springConfig)
+
+  // Cache getBoundingClientRect for 100ms to avoid layout thrashing
+  const getCachedRect = useCallback((element: Element): DOMRect => {
+    const now = Date.now()
+    if (cachedRect.current &&
+        cachedRect.current.element === element &&
+        now - cachedRect.current.time < 100) {
+      return cachedRect.current.rect
+    }
+    const rect = element.getBoundingClientRect()
+    cachedRect.current = { element, rect, time: now }
+    return rect
+  }, [])
 
   useEffect(() => {
     const hasMouseDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches
@@ -38,9 +54,8 @@ export default function CustomCursor() {
 
     // Check if point is within element bounds with padding tolerance
     const isWithinBounds = (x: number, y: number, element: Element) => {
-      const rect = element.getBoundingClientRect()
+      const rect = getCachedRect(element)
       const cursorType = element.getAttribute('data-cursor')
-      // Smaller padding for text cursor elements since they span full width
       const padding = cursorType === 'text' ? 20 : 30
       return (
         x >= rect.left - padding &&
@@ -67,53 +82,72 @@ export default function CustomCursor() {
       }
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX)
-      cursorY.set(e.clientY)
+    // Process mouse position using RAF for smooth updates
+    const processMousePosition = () => {
+      if (!pendingMousePos.current) return
 
-      // Check if we're still within bounds of the last interactive element
+      const { x, y } = pendingMousePos.current
+      cursorX.set(x)
+      cursorY.set(y)
+
+      // Check bounds only if we have a tracked element
       if (lastInteractiveElement.current) {
-        if (!isWithinBounds(e.clientX, e.clientY, lastInteractiveElement.current)) {
+        if (!isWithinBounds(x, y, lastInteractiveElement.current)) {
           scheduleReset()
         } else {
           cancelReset()
         }
+      }
+
+      pendingMousePos.current = null
+      rafId.current = null
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Store position and schedule RAF if not already scheduled
+      pendingMousePos.current = { x: e.clientX, y: e.clientY }
+      if (!rafId.current) {
+        rafId.current = requestAnimationFrame(processMousePosition)
       }
     }
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement
 
-      const cursorType = target.closest('[data-cursor]')?.getAttribute('data-cursor')
+      // Check for data-cursor-default FIRST - force default cursor
+      if (target.closest('[data-cursor-default]')) {
+        cancelReset()
+        lastInteractiveElement.current = null
+        setCursorVariant('default')
+        setCursorText('')
+        return
+      }
+
+      // Cache closest queries to reduce DOM traversal
+      const cursorElement = target.closest('[data-cursor]')
+      const cursorType = cursorElement?.getAttribute('data-cursor')
       const text = target.closest('[data-cursor-text]')?.getAttribute('data-cursor-text')
 
-      // Check if element wants default cursor (no hover effect)
-      if (target.closest('[data-cursor-default]')) {
-        if (!lastInteractiveElement.current) {
-          scheduleReset()
-        }
-      } else if (cursorType === 'text' && text) {
+      if (cursorType === 'text' && text) {
         cancelReset()
-        lastInteractiveElement.current = target.closest('[data-cursor]')
+        lastInteractiveElement.current = cursorElement
         setCursorVariant('text')
         setCursorText(text)
       } else if (target.closest('[data-cursor-hidden]')) {
         cancelReset()
         lastInteractiveElement.current = null
         setCursorVariant('hidden')
-      } else if (target.closest('a, button, [data-cursor-hover]')) {
-        cancelReset()
-        lastInteractiveElement.current = target.closest('a, button, [data-cursor-hover]')
-        setCursorVariant('hover')
-        setCursorText('')
       } else {
-        // Only schedule reset if we're not over an interactive element
-        if (!target.closest('[data-cursor]') && !target.closest('a, button, [data-cursor-hover]')) {
-          if (lastInteractiveElement.current) {
-            const withinBounds = isWithinBounds(e.clientX, e.clientY, lastInteractiveElement.current)
-            if (!withinBounds) {
-              scheduleReset()
-            }
+        const interactiveElement = target.closest('a, button, [data-cursor-hover]')
+        if (interactiveElement) {
+          cancelReset()
+          lastInteractiveElement.current = interactiveElement
+          setCursorVariant('hover')
+          setCursorText('')
+        } else if (!cursorElement && lastInteractiveElement.current) {
+          const withinBounds = isWithinBounds(e.clientX, e.clientY, lastInteractiveElement.current)
+          if (!withinBounds) {
+            scheduleReset()
           }
         }
       }
@@ -130,7 +164,7 @@ export default function CustomCursor() {
     }
 
     document.addEventListener('mousemove', handleMouseMove, { passive: true })
-    document.addEventListener('mouseover', handleMouseOver)
+    document.addEventListener('mouseover', handleMouseOver, { passive: true })
     document.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('mouseup', handleMouseUp)
@@ -138,13 +172,14 @@ export default function CustomCursor() {
     return () => {
       observer.disconnect()
       cancelReset()
+      if (rafId.current) cancelAnimationFrame(rafId.current)
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [cursorX, cursorY])
+  }, [cursorX, cursorY, getCachedRect])
 
   if (!isVisible) return null
 

@@ -2192,10 +2192,9 @@ textarea:focus-visible {
   perspective: 1000px;
 }
 
-/* Optimize all interactive elements */
-a, button, [role="button"] {
+/* Optimize interactive elements on hover only */
+a:hover, button:hover, [role="button"]:hover {
   transform: translateZ(0);
-  will-change: transform;
 }
 
 /* Smooth image rendering */
@@ -2218,9 +2217,8 @@ main {
   transform: translateZ(0);
 }
 
-/* Optimize framer-motion elements */
+/* Optimize framer-motion elements - backface only, no will-change for performance */
 [style*="transform"] {
-  will-change: transform;
   backface-visibility: hidden;
 }
 
@@ -2240,7 +2238,6 @@ section {
 .hero__title,
 .section-header__title,
 .page-hero__title {
-  will-change: transform, opacity;
   transform: translateZ(0);
 }
 
@@ -2276,7 +2273,6 @@ section {
 
 .split-text-reveal__char {
   display: inline-block;
-  will-change: transform;
 }
 
 /* Rotating Word - Hero Section */
@@ -2290,7 +2286,6 @@ section {
 .rotating-word__text {
   display: inline-block;
   transform-origin: center bottom;
-  will-change: transform;
 }
 
 /* Text Line Reveal - CTA Section */
@@ -2307,7 +2302,6 @@ section {
 
 .text-line-reveal__word {
   display: inline-block;
-  will-change: transform;
 }
 
 /* Text Reveal Component */
@@ -2324,7 +2318,6 @@ section {
 
 .text-reveal__item {
   display: inline-block;
-  will-change: transform;
 }
 
 /* Split Flap Text - Loading Screen */
@@ -2340,7 +2333,6 @@ section {
 
 .split-flap-text__char {
   display: inline-block;
-  will-change: transform, opacity;
 }
 
 /* GPU acceleration for premium animations */
@@ -2370,5 +2362,4 @@ section {
 
 .clip-reveal__item {
   display: inline-block;
-  will-change: transform;
 }

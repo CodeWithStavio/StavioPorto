@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useCallback } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 interface ParallaxCardProps {
@@ -10,6 +10,8 @@ interface ParallaxCardProps {
 
 export default function ParallaxCard({ children, className = '' }: ParallaxCardProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const rafId = useRef<number | null>(null)
+  const cachedRect = useRef<{ rect: DOMRect; time: number } | null>(null)
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -20,22 +22,38 @@ export default function ParallaxCard({ children, className = '' }: ParallaxCardP
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['10deg', '-10deg'])
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-10deg', '10deg'])
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const getCachedRect = useCallback(() => {
+    const now = Date.now()
+    if (cachedRect.current && now - cachedRect.current.time < 100) {
+      return cachedRect.current.rect
+    }
     const rect = ref.current!.getBoundingClientRect()
-    const width = rect.width
-    const height = rect.height
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
-    const xPct = mouseX / width - 0.5
-    const yPct = mouseY / height - 0.5
-    x.set(xPct)
-    y.set(yPct)
-  }
+    cachedRect.current = { rect, time: now }
+    return rect
+  }, [])
 
-  const handleMouseLeave = () => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (rafId.current) return
+
+    rafId.current = requestAnimationFrame(() => {
+      const rect = getCachedRect()
+      const mouseX = e.clientX - rect.left
+      const mouseY = e.clientY - rect.top
+      x.set(mouseX / rect.width - 0.5)
+      y.set(mouseY / rect.height - 0.5)
+      rafId.current = null
+    })
+  }, [getCachedRect, x, y])
+
+  const handleMouseLeave = useCallback(() => {
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current)
+      rafId.current = null
+    }
+    cachedRect.current = null
     x.set(0)
     y.set(0)
-  }
+  }, [x, y])
 
   return (
     <motion.div
