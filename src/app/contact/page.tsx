@@ -72,7 +72,7 @@ export default function ContactPage() {
       {/* Hero */}
       <section className="page-hero">
         <div className="container">
-          <h1 className="title-xxl">
+          <h1 className="title-xxl" style={{ fontFamily: "'PixelTech', monospace" }}>
             {COPY.contact.heroTitle.map((line, i) => (
               <span key={i} style={{ display: 'block' }}>{line}</span>
             ))}

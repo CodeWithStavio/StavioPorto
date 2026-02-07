@@ -80,7 +80,7 @@ function ScrambleText({ text }: { text: string }) {
           }}
           style={{
             display: 'inline-block',
-            fontFamily: 'var(--font-geist-mono), monospace',
+            fontFamily: "'PixelTech', monospace",
           }}
         >
           {char}
@@ -244,7 +244,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
             fontSize: '11px',
             letterSpacing: '0.25em',
             color: 'var(--text-secondary)',
-            fontFamily: 'var(--font-geist-mono), monospace',
+            fontFamily: "'PixelTech', monospace",
           }}>
             STAVIO.DEV
           </span>
@@ -252,7 +252,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
             fontSize: '10px',
             letterSpacing: '0.15em',
             color: 'var(--text-tertiary)',
-            fontFamily: 'var(--font-geist-mono), monospace',
+            fontFamily: "'PixelTech', monospace",
           }}>
             PORTFOLIO 2026
           </span>
@@ -278,7 +278,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
               fontWeight: 200,
               letterSpacing: '-0.02em',
               color: 'var(--foreground)',
-              fontFamily: 'var(--font-geist-mono), monospace',
+              fontFamily: "'PixelTech', monospace",
               lineHeight: 1,
             }}
           >
@@ -287,7 +287,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
           <span style={{
             fontSize: '14px',
             color: 'var(--text-tertiary)',
-            fontFamily: 'var(--font-geist-mono), monospace',
+            fontFamily: "'PixelTech', monospace",
           }}>
             %
           </span>
@@ -375,7 +375,7 @@ export default function LoadingScreen({ children }: LoadingScreenProps) {
             fontSize: '11px',
             letterSpacing: '0.2em',
             color: 'var(--text-secondary)',
-            fontFamily: 'var(--font-geist-mono), monospace',
+            fontFamily: "'PixelTech', monospace",
             textTransform: 'uppercase',
           }}>
             Loading Experience

@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 /* =============================================
+   CUSTOM FONTS
+   ============================================= */
+
+@font-face {
+  font-family: 'PixelTech';
+  src: url('/fonts/pixel-tech.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* =============================================
    STAVIO.DEV - CTO-LEVEL DESIGN SYSTEM
    Proper Shadcn Color Implementation
    ============================================= */
@@ -870,6 +882,7 @@ button {
 }
 
 .hero__marquee-item {
+  font-family: 'PixelTech', monospace;
   font-size: var(--small);
   color: var(--text-secondary);
   font-weight: 500;
@@ -934,7 +947,7 @@ button {
 }
 
 .section-header span:first-child {
-  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-family: 'PixelTech', 'SF Mono', 'Fira Code', monospace;
   font-size: var(--xs);
   color: var(--text-tertiary);
 }
@@ -1004,6 +1017,7 @@ button {
 }
 
 .expertise__number {
+  font-family: 'PixelTech', monospace;
   font-size: var(--title-xl);
   font-weight: 200;
   color: var(--text-tertiary);
@@ -1149,6 +1163,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'PixelTech', monospace;
   font-size: var(--title-xxl);
   font-weight: 100;
   color: rgba(255, 255, 255, 0.2);
@@ -1182,6 +1197,7 @@ button {
 }
 
 .work-card__title {
+  font-family: 'PixelTech', monospace;
   font-size: var(--title-l);
   font-weight: 500;
   color: var(--foreground);
@@ -1195,6 +1211,7 @@ button {
 }
 
 .work-card__subtitle {
+  font-family: 'PixelTech', monospace;
   font-size: var(--small);
   color: var(--text-tertiary);
   font-weight: 400;
@@ -1222,6 +1239,7 @@ button {
 }
 
 .work-card__tag {
+  font-family: 'PixelTech', monospace;
   font-size: var(--xs);
   color: var(--text-secondary);
   background-color: var(--muted);
@@ -1383,6 +1401,7 @@ button {
 }
 
 .contact__email {
+  font-family: 'PixelTech', monospace;
   font-size: var(--title-m);
   color: var(--foreground);
   font-weight: 500;
@@ -1443,6 +1462,7 @@ button {
 }
 
 .contact__social-text {
+  font-family: 'PixelTech', monospace;
   position: relative;
 }
 

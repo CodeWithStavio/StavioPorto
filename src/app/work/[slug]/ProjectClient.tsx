@@ -122,6 +122,7 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
             }}
           >
             <span style={{
+              fontFamily: "'PixelTech', monospace",
               fontSize: 'var(--title-m)',
               fontWeight: 200,
               color: 'var(--text-tertiary)',
@@ -145,7 +146,7 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
           </motion.div>
 
           {/* Title - CLIP REVEAL */}
-          <h1 className="title-xxl" style={{ marginBottom: '1.5rem' }}>
+          <h1 className="title-xxl" style={{ fontFamily: "'PixelTech', monospace", marginBottom: '1.5rem' }}>
             <ClipTitle isInView={heroInView} delay={0.15}>{project.title}</ClipTitle>
           </h1>
 
@@ -180,6 +181,7 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
               <span
                 key={i}
                 style={{
+                  fontFamily: "'PixelTech', monospace",
                   padding: '0.375rem 0.75rem',
                   background: 'var(--muted)',
                   borderRadius: '2rem',
@@ -306,6 +308,7 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                   {metric.label}
                 </div>
                 <div style={{
+                  fontFamily: "'PixelTech', monospace",
                   fontSize: 'var(--title-m)',
                   fontWeight: 300,
                   color: 'var(--foreground)',
@@ -353,6 +356,7 @@ export default function ProjectClient({ project, nextProject, prevProject }: Pro
                   height: '32px',
                   background: 'var(--muted)',
                   borderRadius: '50%',
+                  fontFamily: "'PixelTech', monospace",
                   fontSize: 'var(--small)',
                   fontWeight: 600,
                   color: 'var(--text-secondary)',

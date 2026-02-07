@@ -57,6 +57,7 @@ function RotatingWord({ words, interval = 2500 }: { words: string[]; interval?: 
             duration: 0.7,
             ease: [0.65, 0, 0.35, 1],
           }}
+          style={{ fontFamily: "'PixelTech', monospace" }}
         >
           {words[index]}
         </motion.span>

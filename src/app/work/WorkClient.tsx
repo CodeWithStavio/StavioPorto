@@ -147,12 +147,9 @@ export default function WorkClient() {
       {/* Header */}
       <section className="page-hero" ref={headerRef}>
         <div className="container">
-          <h1 className="title-xxl">
+          <h1 className="title-xxl" style={{ fontFamily: "'PixelTech', monospace" }}>
             <span style={{ display: 'block' }}>
-              <ClipTitle isInView={headerInView} delay={0}>Results:</ClipTitle>
-            </span>
-            <span style={{ display: 'block' }}>
-              <ClipTitle isInView={headerInView} delay={0.25}>My Portfolio</ClipTitle>
+              <ClipTitle isInView={headerInView} delay={0}>My Portfolio</ClipTitle>
             </span>
           </h1>
         </div>

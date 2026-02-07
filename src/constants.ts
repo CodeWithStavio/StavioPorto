@@ -165,10 +165,10 @@ export const PROJECTS = [
   {
     id: '04',
     slug: 'fuse',
-    title: 'F.U.S.E',
+    title: 'FUSE',
     subtitle: 'Junior Project',
     description: 'Financial ecosystem with mobile wallets, P2P transfers, and AI-driven spending analytics. Trained XGBoost fraud detection model on 2.7M transactions. Implemented RSA/AES-256-GCM encryption securing all APIs. NFC/QR payments with AI financial advisory features.',
-    longDescription: 'A next-generation fintech platform that makes money management intelligent. From payments to fraud detection, F.U.S.E leverages AI to protect and advise users.',
+    longDescription: 'A next-generation fintech platform that makes money management intelligent. From payments to fraud detection, FUSE leverages AI to protect and advise users.',
     color: 'transparent',
     image: '/assets/Fuse.webp',
     tags: ['React Native', 'Python', 'XGBoost', 'Node.js', 'Next.js', 'PostgreSQL', 'RSA/AES-256', 'NFC', 'TypeScript'],

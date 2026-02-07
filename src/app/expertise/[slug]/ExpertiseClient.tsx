@@ -128,6 +128,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             }}
           >
             <span style={{
+              fontFamily: "'PixelTech', monospace",
               fontSize: 'var(--small)',
               fontWeight: 600,
               color: 'var(--text-secondary)',
@@ -138,7 +139,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
           </motion.div>
 
           {/* Title - CLIP REVEAL */}
-          <h1 className="title-xxl" style={{ marginBottom: '1.5rem' }}>
+          <h1 className="title-xxl" style={{ fontFamily: "'PixelTech', monospace", marginBottom: '1.5rem' }}>
             <ClipTitle isInView={heroInView} delay={0.15}>{expertise.title}</ClipTitle>
           </h1>
 
@@ -167,6 +168,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
             position: 'absolute',
             right: '-5vw',
             top: '20%',
+            fontFamily: "'PixelTech', monospace",
             fontSize: 'clamp(150px, 25vw, 400px)',
             fontWeight: 100,
             color: 'var(--text-tertiary)',
@@ -205,6 +207,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
                 }}
               >
                 <div style={{
+                  fontFamily: "'PixelTech', monospace",
                   fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                   fontWeight: 200,
                   color: 'var(--foreground)',
@@ -263,6 +266,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
                   gap: '1rem',
                 }}>
                   <span style={{
+                    fontFamily: "'PixelTech', monospace",
                     fontSize: 'var(--small)',
                     color: 'var(--text-tertiary)',
                     fontWeight: 500,
@@ -317,6 +321,7 @@ export default function ExpertiseClient({ expertise, nextExpertise, prevExpertis
                 animate={toolsInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.3, delay: i * 0.03 }}
                 style={{
+                  fontFamily: "'PixelTech', monospace",
                   padding: '0.75rem 1.25rem',
                   background: 'var(--background)',
                   border: '1px solid var(--border)',
