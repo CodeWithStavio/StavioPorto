@@ -16,7 +16,7 @@ export default function MagneticButton({
   onClick,
   strength = 0.3
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLButtonElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const rafId = useRef<number | null>(null)
   const cachedRect = useRef<{ rect: DOMRect; time: number } | null>(null)
 
@@ -36,7 +36,7 @@ export default function MagneticButton({
     return rect
   }, [])
 
-  const handleMouse = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouse = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (rafId.current) return
 
     rafId.current = requestAnimationFrame(() => {
@@ -59,15 +59,15 @@ export default function MagneticButton({
   }, [x, y])
 
   return (
-    <motion.button
+    <motion.div
       ref={ref}
       className={className}
       onClick={onClick}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      style={{ x: xSpring, y: ySpring }}
+      style={{ x: xSpring, y: ySpring, display: 'inline-block' }}
     >
       {children}
-    </motion.button>
+    </motion.div>
   )
 }

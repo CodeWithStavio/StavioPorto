@@ -1352,13 +1352,15 @@ button {
   }
 }
 
-.magnetic-btn:hover {
-  background-color: transparent;
-  color: var(--foreground);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    inset 0 0 0 1px var(--foreground);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .magnetic-btn:hover {
+    background-color: transparent;
+    color: var(--foreground);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 0 0 1px var(--foreground);
+    transform: translateY(-2px);
+  }
 }
 
 .magnetic-btn span {
