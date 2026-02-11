@@ -18,6 +18,7 @@ export default function Navigation() {
     e.stopPropagation()
     e.preventDefault()
     if (isThemeChanging) return
+    console.trace('[DEBUG] Theme toggle triggered by:', (e.target as HTMLElement).className)
     setIsThemeChanging(true)
     toggleTheme()
     setTimeout(() => setIsThemeChanging(false), 300)

@@ -569,12 +569,14 @@ button {
   z-index: 90;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.5s var(--ease);
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease), visibility 0.5s var(--ease);
 }
 
 .menu-overlay.is-open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .menu-overlay .container {
@@ -1807,6 +1809,7 @@ textarea:focus-visible {
   background: var(--neutral-900);
   transform-origin: 0%;
   z-index: 9999;
+  pointer-events: none;
 }
 
 .scroll-progress-glow {
