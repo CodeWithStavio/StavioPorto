@@ -98,7 +98,7 @@ export const PROJECTS = [
     description: 'Led end-to-end delivery of cross-platform insurance mobile app for iOS and Android. Built scalable architecture integrating React Native with Laravel APIs via Inertia.js. Developed web frontend with Vite and implemented secure backend services.',
     longDescription: 'A comprehensive insurance platform that revolutionizes how users manage their policies. From policy browsing to claims submission, every interaction was designed for simplicity and trust.',
     color: '#0a0a0a',
-    image: '/assets/bima-logo.webp',
+    image: '/assets/bima-logo.png',
     tags: ['React Native', 'Laravel', 'Vite', 'Inertia.js', 'iOS', 'Android'],
     role: 'Lead Developer',
     duration: '6 months',
